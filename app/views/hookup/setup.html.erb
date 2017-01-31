@@ -1,0 +1,19 @@
+<h1>GoogleCalendarとConnectシステムを連携します</h1>
+
+<p>以下の情報を入力してください</p>
+
+<!--getcode.htmlに送信-->
+<%= form_tag hookup_getcode_path do %>
+
+  <p>クライアントID</p>
+  <input type="text" class="form-control title-field" name="clientId">
+  <p>クライアントシークレット</p>
+  <input type="text" class="form-control title-field" name="clientSecret">
+  <p>承認済みのリダイレクトURI</p>
+  <input type="text" class="form-control title-field" name="redirectUri">
+  <p>カレンダーID</p>
+  <input type="text" class="form-control title-field" name="calendarId">
+  
+  <input type="submit" value="送信" class="btn primary-btn">
+
+<%end%>
