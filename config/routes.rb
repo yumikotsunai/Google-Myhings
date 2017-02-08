@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  
   root 'hookup#setup'
   
   get 'hookup/setup'
@@ -12,6 +13,9 @@ Rails.application.routes.draw do
   
   get 'hookup/createchannel'
   post 'hookup/createchannel'
+  
+  get 'notifications/callback'
+  post 'notifications/callback'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -47,4 +47,5 @@ end
 
 #tsunai add
 gem 'http'
-gem 'google-api-client', '0.7'
+gem 'google-api-client', '0.8'
+#gem 'google-api-client'
