@@ -16,6 +16,12 @@ Rails.application.routes.draw do
   
   get 'notifications/callback'
   post 'notifications/callback'
+  
+  get 'connecthookup/new'
+  post 'connecthookup/new'
+  
+  get 'connecthookup/callback'
+  post 'connecthookup/callback'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

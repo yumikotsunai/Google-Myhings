@@ -1,13 +1,11 @@
 require 'http'
 require 'google/api_client'
 
+#GoogleCalendarのAOuth認証
 class HookupController < ApplicationController
   
   # この↓一文がないとCSRF(Cross-Site Request Forgery)チェックでこけるので、APIをやりとりしているControllerには必要
   skip_before_filter :verify_authenticity_token
-  
-  #クラス変数（同一クラス及びそこから生成されるオブジェクト（インスタンス）の中からどこからでも参照可能な変数）の初期化
-  #attr_reader :clientId, :clientSecret, :redirectUri, :calendarId, :accessToken, :refreshToken
   
   #クライアントID,クライアントシークレット,承認済みのリダイレクトURI,カレンダーIDを入力
   def setup
@@ -15,9 +13,12 @@ class HookupController < ApplicationController
   
   #上記変数を受取る
   def getcode
-    @@clientId = params[:clientId]
-    @@clientSecret = params[:clientSecret]
-    @@calendarId = params[:calendarId]
+    #@@clientId = params[:clientId]
+    @@clientId = "841258018012-jqn06q4ifmfvbj5ip42rvtemetcga7oj.apps.googleusercontent.com"
+    #@@clientSecret = params[:clientSecret]
+    @@clientSecret = "HuQ43i5_NiqOeOIZca4oJttJ"
+    #@@calendarId = params[:calendarId]
+    @@calendarId = "i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com"
     @@redirectUri = "https://google-demo-yumikotsunai.c9users.io/hookup/callback"
     
     #google認証のURLにリダイレクト
@@ -32,10 +33,9 @@ class HookupController < ApplicationController
   def callback
     #引数(=コード)を取得
     code = params[:code]
-    puts("インスタンス変数")
-    puts(@@clientId)
-    puts(@@clientSecret)
-    puts(@@redirectUri)
+    #puts(@@clientId)
+    #puts(@@clientSecret)
+    #puts(@@redirectUri)
     
     #クライアントID,クライアントシークレット,承認済みのリダイレクトURI,コードから、リフレッシュトークンとアクセストークンを取得
     postbody = {
@@ -48,10 +48,10 @@ class HookupController < ApplicationController
     
     #HTTP.post(URL)でURLにpostリクエストを送る
     res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded").post("https://accounts.google.com/o/oauth2/token", :form => postbody )
-	  puts(res)
+	  #puts(res)
 	  
 	  res_json = JSON.parse res
-	  puts(res_json)
+	  #puts(res_json)
 	  @@accessToken = res_json["access_token"]
 	  @@refreshToken = res_json["refresh_token"]
 	  #puts(@@accessToken)
@@ -108,16 +108,16 @@ class HookupController < ApplicationController
       }
     )
 	  
+	  debugger
 	  @status = res.status
 	  
-	  #if res.status == "200"
-    #  @status = "システムの連携に成功しました"
-    #else
-	  #	@status = "システムの連携に失敗しました"
-	  #end
-	   
-	  #puts(@status)
-	  #puts(res.body)
+	  if res.status.to_s == "200"
+      @status = "認証に成功しました"
+    else
+	  	@status = "認証に失敗しました"
+	  end
+	  
+	  puts(res.body)
 	  
   end
   

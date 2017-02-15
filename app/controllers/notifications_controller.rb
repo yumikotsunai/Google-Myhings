@@ -1,4 +1,5 @@
 require 'google/api_client'
+require 'json'
 
 
 class NotificationsController < ApplicationController
@@ -6,22 +7,46 @@ class NotificationsController < ApplicationController
   # この↓一文がないとCSRF(Cross-Site Request Forgery)チェックでこけるので、APIをやりとりしているControllerには必要
   skip_before_filter :verify_authenticity_token
   
+  @@count = 0
+  @@email = ""
+  @@startStr = ""
+  @@endStr = ""
+  
+  
   #push notificationの受取り
   def callback
     
-    #読み込み時に一度パースが必要
-	  #json_request = JSON.parse(request.body.read)
-	  
-	  #puts(response.headers)
-	  #puts(response.body)
+    #googleCalendarからのrequest情報
+    channelId = request.headers["HTTP_X_GOOG_CHANNEL_ID"]
+    resourceId = request.headers["HTTP_X_GOOG_RESOURCE_ID"]
     
-    #if request.body.read.blank?
-    #  puts(request.body.)
-    #else
-	  #	puts("空")
-	  #end
+	  #不要なchannelの削除
+	  #hookupクラスインスタンスの初期化
+    hookup = HookupController.new
+    accessToken = hookup.dispAccessToken
+	  #必要なのがhttpsなのでSSLを有効にする。とりあえず証明書は無視。
+    ctx = OpenSSL::SSL::SSLContext.new
+    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    
+    postbody = {
+      "id": channelId,
+      "resourceId": resourceId,
+    }
+    
+    auth = "Bearer " + accessToken
+    #res = HTTP.headers("Content-Type" => "application/json",:Authorization => auth)
+    #.post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => ctx , :body => postbody.to_json)
+    
+    #puts("channel削除")
+    #puts(res.code)
+    
+	  @@count = @@count + 1
+	  puts(@@count) 
 	  
-	  #push notificationを受取ったらイベント情報を取得
+    #if @@count != 1
+    #  return
+    #end
+
 	  getevent
 	  
   end
@@ -36,9 +61,9 @@ class NotificationsController < ApplicationController
     #クラス変数の値取得
     clientId = hookup.dispClientId
     clientSecret = hookup.dispClientSecret
-    redirectUri = hookup.dispRedirectUri
+    #redirectUri = hookup.dispRedirectUri
     calendarId = hookup.dispCalendarId
-    accessToken = hookup.dispAccessToken
+    #accessToken = hookup.dispAccessToken
     refreshToken = hookup.dispRefreshToken
     
     #GoogleApiイベントメソッド呼出し
@@ -58,52 +83,53 @@ class NotificationsController < ApplicationController
       }
     )
     
+    res_hash = ActiveSupport::JSON.decode(res.body)
+    items = res_hash["items"]
     puts("イベント情報の取得")
-    #puts(res.headers)
-    puts(res.body)
+    puts(items)
     
-    res_hash = JSON.parse(res.body)
-    puts(res_hash)
-    
-    #イベント詳細
-    item = res_hash["items"]
-    
-    
-    if !item.blank?
-      puts("データ")
-      puts(item)
-      #creator = res_hash["items"]["creator"]
-      #puts(creator)
+    if !items.blank?
       
-      creator = "yumikokke@gmail.com"
-      startAt = "2017-02-15T08:00:00+09:00"
-      endAt = "2017-02-15T09:00:00+09:00"
+      email = ""
+      startStr = ""
+      endStr = ""
       
+      items.each do |item|
+        email = item["creator"]["email"]
+        #startStr = item["start"]["date"]
+        #endStr = item["end"]["date"]
+        startStr = item["start"]["dateTime"]
+        endStr = item["end"]["dateTime"]
+      end
       
+      #debugger
+      
+      if @@email != email or @@startStr != startStr or @@endStr != endStr
+      
+        #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00を削除）
+        #startDatetime = startStr.to_datetime - Rational(9, 24)  
+        startAt = startStr.slice(0,19)
+        
+        #endDatetime = endStr.to_datetime - Rational(9, 24)  
+        endAt = endStr.slice(0,19)
+        
+        #debugger
+        #ConnectAPIの呼出し
+        connectApi = ConnectapiController.new
+        
+        #アクセスゲストの作成
+        connectApi.createguests(email,startAt,endAt)
+      
+      end 
+      
+      @@email = email
+      @@startStr = startStr
+      @@endStr = endStr
       
     else
       puts("まだ")
 	  end
     
-    
-    #item2 = JSON.parse(params[:items])
-    #puts(item2)
-    
-    #if !params[:items].blank?
-    #  item2 = JSON.parse(params[:items])
-    #  puts("データ")
-    #  puts(item2)
-    #else
-	  #	puts("まだ")
-	  #end
-    
-	  #creator = item["creator"]
-	  #email = creator["email"]
-	  #startAt = item["start"]
-	  #startTime = startAt["dateTime"]
-	  #endAt = item["end"]
-	  #endTime = endAt["dateTime"]
-	  
   end
   
 end

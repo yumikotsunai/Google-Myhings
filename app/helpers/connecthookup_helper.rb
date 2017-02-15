@@ -1,0 +1,2 @@
+module ConnecthookupHelper
+end

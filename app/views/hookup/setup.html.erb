@@ -1,19 +1,22 @@
-<h1>GoogleCalendarとConnectシステムを連携します</h1>
+<div style= "text-align:center;line-height:100%;padding:10px;">
+  <h2>GoogleCalendarとConnectシステムを連携します</h2>
+  <p>以下に、GoogleCalendarの情報を入力してください</p>
+</div>
 
-<p>以下の情報を入力してください</p>
-
-<!--getcode.htmlに送信-->
-<%= form_tag hookup_getcode_path do %>
-
-  <p>クライアントID</p>
-  <input type="text" class="form-control title-field" name="clientId">
-  <p>クライアントシークレット</p>
-  <input type="text" class="form-control title-field" name="clientSecret">
-  <p>カレンダーID</p>
-  <input type="text" class="form-control title-field" name="calendarId">
-  <!--<p>承認済みのリダイレクトURI</p>
-  <input type="text" class="form-control title-field" name="redirectUri">-->
+<div style= "text-align:center;line-height:100%;padding:50px;">
+  <!--getcode.htmlに送信-->
+  <%= form_tag hookup_getcode_path do %>
   
-  <input type="submit" value="送信" class="btn primary-btn">
-
-<%end%>
+    <p>クライアントID</p>
+    <input type="text" class="form-control title-field" name="clientId" style="width:500px">
+    <p>クライアントシークレット</p>
+    <input type="text" class="form-control title-field" name="clientSecret" style="width:500px">
+    <p>カレンダーID</p>
+    <input type="text" class="form-control title-field" name="calendarId" style="width:500px">
+    <!--<p>承認済みのリダイレクトURI</p>
+    <input type="text" class="form-control title-field" name="redirectUri">-->
+    
+    <input type="submit" value="送信" class="btn primary-btn">
+  
+  <%end%>
+</div>

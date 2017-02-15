@@ -1,0 +1,13 @@
+<h1>Connectapi#getlocks</h1>
+<p>Find me in app/views/connectapi/getlocks.html.erb</p>
+<br>
+<br>
+名称<span>｜</span>オートロック<span>オートロック時間</span>
+<% @res['data'].each do |lock| %>
+    <%= lock["attributes"]["name"] %><span></span>
+    <%= lock["attributes"]["auto_lock"] %><span></span>
+    <%= lock["attributes"]["auto_lock_timeout"] %><br>
+<% end %>
+<br>
+<br>
+body:<%= @res  %>
