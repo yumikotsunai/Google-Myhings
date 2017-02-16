@@ -16,14 +16,17 @@ class NotificationsController < ApplicationController
   #push notificationの受取り
   def callback
     
+	  @@count = @@count + 1
+	  puts(@@count) 
+	  
     #googleCalendarからのrequest情報
     channelId = request.headers["HTTP_X_GOOG_CHANNEL_ID"]
     resourceId = request.headers["HTTP_X_GOOG_RESOURCE_ID"]
     
 	  #不要なchannelの削除
 	  #hookupクラスインスタンスの初期化
-    hookup = HookupController.new
-    accessToken = hookup.dispAccessToken
+    #hookup = HookupController.new
+    #accessToken = hookup.dispAccessToken
 	  #必要なのがhttpsなのでSSLを有効にする。とりあえず証明書は無視。
     ctx = OpenSSL::SSL::SSLContext.new
     ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -33,20 +36,14 @@ class NotificationsController < ApplicationController
       "resourceId": resourceId,
     }
     
-    auth = "Bearer " + accessToken
+    #auth = "Bearer " + accessToken
     #res = HTTP.headers("Content-Type" => "application/json",:Authorization => auth)
     #.post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => ctx , :body => postbody.to_json)
     
     #puts("channel削除")
     #puts(res.code)
     
-	  @@count = @@count + 1
-	  puts(@@count) 
-	  
-    #if @@count != 1
-    #  return
-    #end
-
+    #イベント情報の取得
 	  getevent
 	  
   end

@@ -108,7 +108,6 @@ class HookupController < ApplicationController
       }
     )
 	  
-	  debugger
 	  @status = res.status
 	  
 	  if res.status.to_s == "200"

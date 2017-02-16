@@ -73,8 +73,6 @@ class ConnecthookupController < ApplicationController
       #  puts "データベースへの保存で問題が発生しました"
       #end
       
-      debugger
-      
       @res = connecttoken
       @state = "認証に成功しました"
       render
