@@ -83,10 +83,9 @@ class NotificationsController < ApplicationController
     puts("イベント情報の取得")
     puts(items)
     
-    
     if !items.blank?
-      
       email = ""
+      addemail = ""
       startStr = ""
       endStr = ""
       
@@ -104,38 +103,18 @@ class NotificationsController < ApplicationController
         end 
         
         #登録ユーザのアクセス権を取得
-        callconnectapi(email, startStr, endStr)
+        callconnectapi(email, email, startStr, endStr)
         
         #追加メンバーのアクセス権を取得
         attendees = item["attendees"]
         attendees.each do |attendee|
           debugger
         
-          email = attendee["email"]
-          callconnectapi(email, startStr, endStr)
+          addemail = attendee["email"]
+          callconnectapi(email, addemail, startStr, endStr)
+
         end
       end
-      
-      
-      #debugger
-      
-      #if @@email != email or @@startStr != startStr or @@endStr != endStr
-      
-        #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00を削除）
-        #startDatetime = startStr.to_datetime - Rational(9, 24)  
-        #startAt = startStr.slice(0,19)
-        
-        #endDatetime = endStr.to_datetime - Rational(9, 24)  
-        #endAt = endStr.slice(0,19)
-        
-        #debugger
-        #ConnectAPIの呼出し
-        #connectApi = ConnectapiController.new
-        
-        #アクセスゲストの作成
-        #connectApi.createguests(email,startAt,endAt)
-      
-      #end 
       
       @@email = email
       @@startStr = startStr
@@ -149,9 +128,8 @@ class NotificationsController < ApplicationController
   
   
   #ConnectApiメソッド呼出し
-  def callconnectapi(email, startStr, endStr)
+  def callconnectapi(email, addemail, startStr, endStr)
     
-    debugger
     if @@email != email or @@startStr != startStr or @@endStr != endStr
       
       #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00を削除）
@@ -165,7 +143,7 @@ class NotificationsController < ApplicationController
       connectApi = ConnectapiController.new
         
       #アクセスゲストの作成
-      connectApi.createguests(email,startAt,endAt)
+      connectApi.createguests(addemail,startAt,endAt)
     end 
   end
   
