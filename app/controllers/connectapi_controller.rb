@@ -1,6 +1,6 @@
 require 'http'
 require 'json'
-#include ConnectHttp
+include ConnectHttp
 #module ConnectHttpで共通化。CTX:SSL証明
 
 #ConnectAPIの呼出し
@@ -26,8 +26,8 @@ class ConnectapiController < ApplicationController
   
   #アクセスゲスト作成
   def createguests(email="名無し", statAt="2017-01-24T16:04:00", endAt="2017-01-25T16:04:00")
-    ctx = OpenSSL::SSL::SSLContext.new
-    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    #ctx = OpenSSL::SSL::SSLContext.new
+    #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
     
     #PINコード番号のランダム生成
     pin = (0..9).sort_by{rand}[0,6].join.to_s
@@ -50,7 +50,7 @@ class ConnectapiController < ApplicationController
     
     authtoken = "Bearer "+ Connecttoken.find_by(key: "demo@remotelock.com").access_token
     res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken )
-    .post("https://api.lockstate.jp/access_persons", :ssl_context => ctx , :body => postbody.to_json)
+    .post("https://api.lockstate.jp/access_persons", :ssl_context => CTX , :body => postbody.to_json)
     
     puts("アクセスゲスト作成")
     puts(res.body)
@@ -85,8 +85,8 @@ class ConnectapiController < ApplicationController
   #アクセスゲストにロック権限を追加
   def appendguest2lock(access_persons_id = "0905462f-1a3c-45fd-a330-85c0865d5ef5")
     
-    ctx = OpenSSL::SSL::SSLContext.new
-    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    #ctx = OpenSSL::SSL::SSLContext.new
+    #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
     
     postbody = {
       "attributes": {
@@ -99,7 +99,7 @@ class ConnectapiController < ApplicationController
     apiUri = "https://api.lockstate.jp/access_persons/" + access_persons_id + "/accesses"
     
     res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken)
-    .post(apiUri, :ssl_context => ctx , :body => postbody.to_json)
+    .post(apiUri, :ssl_context => CTX , :body => postbody.to_json)
     
     puts("ロック権限追加")
     puts res
@@ -110,14 +110,14 @@ class ConnectapiController < ApplicationController
   #アクセスゲストにメールを送信
   def sendemail(access_persons_id = "0905462f-1a3c-45fd-a330-85c0865d5ef5")
     
-    ctx      = OpenSSL::SSL::SSLContext.new
-    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    #ctx      = OpenSSL::SSL::SSLContext.new
+    #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
     
     authtoken = "Bearer "+ Connecttoken.find_by(key: "demo@remotelock.com").access_token
     apiuri = "https://api.lockstate.jp/access_persons/" + access_persons_id + "/email/notify"
     
     res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken )
-    .post(apiuri, :ssl_context => ctx)
+    .post(apiuri, :ssl_context => CTX)
     
     puts("メール送信")
     puts(res)
@@ -127,8 +127,8 @@ class ConnectapiController < ApplicationController
   
   #ロック一覧を取得
   def getlocks
-    ctx      = OpenSSL::SSL::SSLContext.new
-    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    #ctx      = OpenSSL::SSL::SSLContext.new
+    #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
     
     authtoken = "Bearer "+ Connecttoken.find_by(key: "demo@remotelock.com").access_token
     

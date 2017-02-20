@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170208082702) do
+ActiveRecord::Schema.define(version: 20170220025721) do
 
   create_table "connectaccounts", force: :cascade do |t|
     t.string   "key"
@@ -28,6 +28,11 @@ ActiveRecord::Schema.define(version: 20170208082702) do
     t.time     "expire"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+  end
+
+  create_table "googleaccounts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

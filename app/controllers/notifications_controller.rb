@@ -1,3 +1,4 @@
+include ConnectHttp
 require 'google/api_client'
 require 'json'
 
@@ -27,10 +28,7 @@ class NotificationsController < ApplicationController
 	  #hookupクラスインスタンスの初期化
     #hookup = HookupController.new
     #accessToken = hookup.dispAccessToken
-	  #必要なのがhttpsなのでSSLを有効にする。とりあえず証明書は無視。
-    ctx = OpenSSL::SSL::SSLContext.new
-    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    
+	  
     postbody = {
       "id": channelId,
       "resourceId": resourceId,
@@ -38,7 +36,7 @@ class NotificationsController < ApplicationController
     
     #auth = "Bearer " + accessToken
     #res = HTTP.headers("Content-Type" => "application/json",:Authorization => auth)
-    #.post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => ctx , :body => postbody.to_json)
+    #.post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => CTX , :body => postbody.to_json)
     
     #puts("channel削除")
     #puts(res.code)
@@ -85,6 +83,7 @@ class NotificationsController < ApplicationController
     puts("イベント情報の取得")
     puts(items)
     
+    
     if !items.blank?
       
       email = ""
@@ -93,31 +92,50 @@ class NotificationsController < ApplicationController
       
       items.each do |item|
         email = item["creator"]["email"]
-        #startStr = item["start"]["date"]
-        #endStr = item["end"]["date"]
         startStr = item["start"]["dateTime"]
         endStr = item["end"]["dateTime"]
+        
+        #debugger
+        if startStr.blank?
+          startStr = item["start"]["date"]
+        end
+        if endStr.blank?
+          endStr = item["end"]["date"]
+        end 
+        
+        #登録ユーザのアクセス権を取得
+        callconnectapi(email, startStr, endStr)
+        
+        #追加メンバーのアクセス権を取得
+        attendees = item["attendees"]
+        attendees.each do |attendee|
+          debugger
+        
+          email = attendee["email"]
+          callconnectapi(email, startStr, endStr)
+        end
       end
+      
       
       #debugger
       
-      if @@email != email or @@startStr != startStr or @@endStr != endStr
+      #if @@email != email or @@startStr != startStr or @@endStr != endStr
       
         #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00を削除）
         #startDatetime = startStr.to_datetime - Rational(9, 24)  
-        startAt = startStr.slice(0,19)
+        #startAt = startStr.slice(0,19)
         
         #endDatetime = endStr.to_datetime - Rational(9, 24)  
-        endAt = endStr.slice(0,19)
+        #endAt = endStr.slice(0,19)
         
         #debugger
         #ConnectAPIの呼出し
-        connectApi = ConnectapiController.new
+        #connectApi = ConnectapiController.new
         
         #アクセスゲストの作成
-        connectApi.createguests(email,startAt,endAt)
+        #connectApi.createguests(email,startAt,endAt)
       
-      end 
+      #end 
       
       @@email = email
       @@startStr = startStr
@@ -127,6 +145,28 @@ class NotificationsController < ApplicationController
       puts("まだ")
 	  end
     
+  end
+  
+  
+  #ConnectApiメソッド呼出し
+  def callconnectapi(email, startStr, endStr)
+    
+    debugger
+    if @@email != email or @@startStr != startStr or @@endStr != endStr
+      
+      #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00を削除）
+      #startDatetime = startStr.to_datetime - Rational(9, 24)  
+      startAt = startStr.slice(0,19)
+        
+      #endDatetime = endStr.to_datetime - Rational(9, 24)  
+      endAt = endStr.slice(0,19)
+      
+      #ConnectAPIの呼出し
+      connectApi = ConnectapiController.new
+        
+      #アクセスゲストの作成
+      connectApi.createguests(email,startAt,endAt)
+    end 
   end
   
 end

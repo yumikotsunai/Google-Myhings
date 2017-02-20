@@ -1,4 +1,4 @@
-#include ConnectHttp
+include ConnectHttp
 require 'net/https'
 require 'http'
 require 'time'
@@ -27,8 +27,8 @@ class ConnecthookupController < ApplicationController
   #トークンの受取り
   def callback
     #必要なのがhttpsなのでSSLを有効にする。とりあえず証明書は無視。
-    ctx = OpenSSL::SSL::SSLContext.new
-    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    #ctx = OpenSSL::SSL::SSLContext.new
+    #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
     
     tmp_token = params[:code]
     postform = {'code' => tmp_token \
@@ -38,7 +38,7 @@ class ConnecthookupController < ApplicationController
     ,'grant_type' => 'authorization_code' }
     
     res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded")
-    .post("https://connect.lockstate.jp/oauth/token", :ssl_context => ctx , :form => postform)
+    .post("https://connect.lockstate.jp/oauth/token", :ssl_context => CTX , :form => postform)
     
     if res.code!=200
       @res = res
