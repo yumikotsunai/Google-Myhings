@@ -116,7 +116,7 @@ class ConnectapiController < ApplicationController
     authtoken = "Bearer "+ Connecttoken.find_by(key: "demo@remotelock.com").access_token
     apiuri = "https://api.lockstate.jp/access_persons/" + access_persons_id + "/email/notify"
     
-    res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken )
+    res = HTTP.headers("Content-Type" => "application/json","Accept-Language" => "ja", :Authorization => authtoken )
     .post(apiuri, :ssl_context => CTX)
     
     puts("メール送信")

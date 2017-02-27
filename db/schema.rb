@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220025721) do
+ActiveRecord::Schema.define(version: 20170220112144) do
 
   create_table "connectaccounts", force: :cascade do |t|
     t.string   "key"
@@ -31,8 +31,12 @@ ActiveRecord::Schema.define(version: 20170220025721) do
   end
 
   create_table "googleaccounts", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "key"
+    t.string   "client_id"
+    t.string   "client_secret"
+    t.string   "calendar_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
 end

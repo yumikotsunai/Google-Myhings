@@ -107,12 +107,12 @@ class NotificationsController < ApplicationController
         
         #追加メンバーのアクセス権を取得
         attendees = item["attendees"]
-        attendees.each do |attendee|
-          debugger
-        
-          addemail = attendee["email"]
-          callconnectapi(email, addemail, startStr, endStr)
-
+        if !attendees.blank?
+          attendees.each do |attendee|
+            debugger
+            addemail = attendee["email"]
+            callconnectapi(email, addemail, startStr, endStr)
+          end
         end
       end
       
