@@ -35,7 +35,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   gem 'sqlite3'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'sqlite3'
   gem 'byebug'
 end
 
