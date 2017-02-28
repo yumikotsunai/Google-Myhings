@@ -101,7 +101,8 @@ class HookupController < ApplicationController
       body_object: {
         id: SecureRandom.uuid(),
         type: 'web_hook',
-        address: 'https://google-demo-yumikotsunai.c9users.io/notifications/callback'
+        #address: 'https://google-demo-yumikotsunai.c9users.io/notifications/callback'
+        address: 'https://kkeapidemo2.herokuapp.com/notifications/callback'
       }
     )
 	  
