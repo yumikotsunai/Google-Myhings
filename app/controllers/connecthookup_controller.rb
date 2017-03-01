@@ -65,20 +65,22 @@ class ConnecthookupController < ApplicationController
         ,:expire => j["created_at"]+j["expires_in"]
       }
       #begin
-      if Connecttoken.find_by(key: key) == nil
-        connecttoken = Connecttoken.new(data)
-        connecttoken.save
-        puts "新しいものとして認識"
-      else
-        connecttoken = Connecttoken.find_by(:key => key)
-        Connecttoken.update(connecttoken.id , :key => key,:access_token => j["access_token"] ,:refresh_token => j["refresh_token"] ,:expire => j["created_at"]+j["expires_in"],:updated_at => Time.now)
-        puts "更新する"
-      end
+      
+      #if Connecttoken.find_by(key: key) == nil
+      #  connecttoken = Connecttoken.new(data)
+      #  connecttoken.save
+      #  puts "新しいものとして認識"
+      #else
+      #  connecttoken = Connecttoken.find_by(:key => key)
+      #  Connecttoken.update(connecttoken.id , :key => key,:access_token => j["access_token"] ,:refresh_token => j["refresh_token"] ,:expire => j["created_at"]+j["expires_in"],:updated_at => Time.now)
+      #  puts "更新する"
+      #end
       #rescue
       #  puts "データベースへの保存で問題が発生しました"
       #end
       
-      @res = connecttoken
+      #@res = connecttoken
+      @res = "トークン"
       @state = "認証に成功しました"
       render
       
