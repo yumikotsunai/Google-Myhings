@@ -75,9 +75,9 @@ class ConnecthookupController < ApplicationController
         Connecttoken.update(connecttoken.id , :key => key,:access_token => j["access_token"] ,:refresh_token => j["refresh_token"] ,:expire => j["created_at"]+j["expires_in"],:updated_at => Time.now)
         puts "更新する"
       end
-      rescue
-        puts "データベースへの保存で問題が発生しました"
-      end
+      #rescue
+      #  puts "データベースへの保存で問題が発生しました"
+      #end
       
       @res = connecttoken
       #@res = "トークン"
