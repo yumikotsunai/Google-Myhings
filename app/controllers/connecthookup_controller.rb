@@ -68,7 +68,7 @@ class ConnecthookupController < ApplicationController
       
       if Connecttoken.find_by(key: key) == nil
         connecttoken = Connecttoken.new(data)
-        connecttoken.save
+        #connecttoken.save
         puts "新しいものとして認識"
       else
         connecttoken = Connecttoken.find_by(:key => key)
@@ -80,7 +80,6 @@ class ConnecthookupController < ApplicationController
       #end
       
       @res = connecttoken
-      #@res = "トークン"
       @state = "認証に成功しました"
       render
       
