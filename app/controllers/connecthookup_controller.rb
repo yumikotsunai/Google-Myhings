@@ -19,8 +19,8 @@ class ConnecthookupController < ApplicationController
     @@secret =	"1bfa525b96c3102c65d1f2be4abfa541f0b57ee17ac92dffbb9abf6417740c23"
     @@callbackuri = URI.encode('https://kkeapidemo2.herokuapp.com/connecthookup/callback')
     
-    if Connectaccount.find_by(key: key) == nil
-      account = Connectaccount.new(key: key,client_id: @@client,client_secret: @@secret)
+    if ConnectAccount.find_by(key: key) == nil
+      account = ConnectAccount.new(key: key,client_id: @@client,client_secret: @@secret)
       account.save
     end
     
@@ -66,13 +66,13 @@ class ConnecthookupController < ApplicationController
       }
       #begin
       
-      if Connecttoken.find_by(key: key) == nil
-        connecttoken = Connecttoken.new(data)
+      if ConnectToken.find_by(key: key) == nil
+        connecttoken = ConnectToken.new(data)
         connecttoken.save
         puts "新しいものとして認識"
       else
-        connecttoken = Connecttoken.find_by(:key => key)
-        Connecttoken.update(connecttoken.id , :key => key,:access_token => j["access_token"] ,:refresh_token => j["refresh_token"] ,:expire => j["created_at"]+j["expires_in"],:updated_at => Time.now)
+        connecttoken = ConnectToken.find_by(:key => key)
+        ConnectToken.update(connecttoken.id , :key => key,:access_token => j["access_token"] ,:refresh_token => j["refresh_token"] ,:expire => j["created_at"]+j["expires_in"],:updated_at => Time.now)
         puts "更新する"
       end
       #rescue

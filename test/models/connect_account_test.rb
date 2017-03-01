@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ConnecttokenTest < ActiveSupport::TestCase
+class ConnectAccountTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
