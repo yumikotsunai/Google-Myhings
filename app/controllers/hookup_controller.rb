@@ -13,6 +13,7 @@ class HookupController < ApplicationController
   
   #上記変数を受取る
   def getcode
+<<<<<<< HEAD
     @@clientId = params[:clientId]
     @@clientSecret = params[:clientSecret]
     @@calendarId = params[:calendarId]
@@ -23,6 +24,20 @@ class HookupController < ApplicationController
     #@@clientSecret = APP_CONFIG["google"]["secret"] || params[:clientSecret]
     #@@calendarId = APP_CONFIG["google"]["calendar_id"] || params[:calendarId]
     #@@redirectUri = APP_CONFIG["webhost"]+'hookup/callback' || params[:redirectUri]
+=======
+    #@@clientId = params[:clientId]
+    @@clientId = "841258018012-jqn06q4ifmfvbj5ip42rvtemetcga7oj.apps.googleusercontent.com"
+    #@@clientId = "404180661728-qotv9so92qt4pp6s7v9jlmheik6bespe.apps.googleusercontent.com"
+    #@@clientSecret = params[:clientSecret]
+    @@clientSecret = "HuQ43i5_NiqOeOIZca4oJttJ"
+    #@@clientSecret = "_ZS6_pVing3DInTzpJ7c3QpJ"
+    #@@calendarId = params[:calendarId]
+    @@calendarId = "i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com"
+    #@@calendarId = "g8ukpibvlfle41hplt1g3rplu0@group.calendar.google.com"
+    #@@redirectUri = params[:redirectUri]
+    @@redirectUri = "https://google-demo-yumikotsunai.c9users.io/hookup/callback"
+    #@@redirectUri = "https://kkeapidemo2.herokuapp.com/hookup/callback"
+>>>>>>> my work リポにローカル環境用変数をセット
     
     #google認証のURLにリダイレクト
     url = 'https://accounts.google.com/o/oauth2/auth?client_id=' + @@clientId + '&redirect_uri=' + @@redirectUri + 
@@ -86,7 +101,14 @@ class HookupController < ApplicationController
       body_object: {
         id: SecureRandom.uuid(),
         type: 'web_hook',
+<<<<<<< HEAD
         address: URI.encode(APP_CONFIG["webhost"]+'notifications/callback')
+=======
+        #ローカル環境
+        address: 'https://google-demo-yumikotsunai.c9users.io/notifications/callback'
+        #heroku環境
+        #address: 'https://kkeapidemo2.herokuapp.com/notifications/callback'
+>>>>>>> my work リポにローカル環境用変数をセット
       }
     )
 	  

@@ -6,6 +6,7 @@ require 'time'
 #ConnectのAOuth認証
 class ConnecthookupController < ApplicationController
   
+<<<<<<< HEAD
   def setup
     #認証情報の入力画面
     session[:_id]
@@ -17,6 +18,20 @@ class ConnecthookupController < ApplicationController
     @@secret =	params[:clientSecret].presence || APP_CONFIG["connect"]["secret"]
     @@callbackuri = URI.encode(APP_CONFIG["webhost"]+'connecthookup/callback')
     #params[:uuId]
+=======
+  #connect認証のURLにリダイレクト
+  def new
+    key = "demo@remotelock.com"
+    #ローカル環境
+    @@client =	"248b4559af5bbdf84998f5c092bc8d9fac784712f28009168c0a1579818aef47"
+    @@secret =	"b88822e0976b6e6a9fb0096a3b1c860b12f9a405fd2d0597a1d60cf68473ac46"
+    @@callbackuri = URI.encode('https://google-demo-yumikotsunai.c9users.io/connecthookup/callback')
+    
+    #heroku環境
+    #@@client =	"86169dfc79da7ce9000a1d2f37dcb95f96d9b3bb03bf32e57b540cbaedbf0989"
+    #@@secret =	"1bfa525b96c3102c65d1f2be4abfa541f0b57ee17ac92dffbb9abf6417740c23"
+    #@@callbackuri = URI.encode('https://kkeapidemo2.herokuapp.com/connecthookup/callback')
+>>>>>>> my work リポにローカル環境用変数をセット
     
     if ConnectAccount.find_by(key: key) == nil
       account = ConnectAccount.new(key: key,client_id: @@client,client_secret: @@secret)
