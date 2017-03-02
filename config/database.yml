@@ -9,10 +9,14 @@ default: &default
   adapter: sqlite3
 =======
   #デバック用
+<<<<<<< HEAD
   adapter: sqlite3  
   #heroku用
   #adapter: pg
 >>>>>>> my work リポにローカル環境用変数をセット
+=======
+  adapter: sqlite3
+>>>>>>> adapterのデフォルトをpgに変更
   pool: 5
   timeout: 5000
 

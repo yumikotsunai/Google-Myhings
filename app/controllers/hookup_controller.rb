@@ -111,6 +111,7 @@ class HookupController < ApplicationController
 >>>>>>> my work リポにローカル環境用変数をセット
       }
     )
+    
 	  
 	  @status = res.status
 	  
