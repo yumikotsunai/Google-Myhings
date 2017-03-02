@@ -5,10 +5,7 @@
 #   gem 'sqlite3'
 #
 default: &default
-  #デバック用
-  #adapter: sqlite3  
-  #heroku用
-  adapter: pg
+  adapter: sqlite3
   pool: 5
   timeout: 5000
 
@@ -26,4 +23,5 @@ test:
 production:
   <<: *default
   #database: db/production.sqlite3
+  adapter: pg
   database: db/production.pg
