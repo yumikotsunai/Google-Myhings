@@ -35,13 +35,20 @@ production:
   <<: *default
   #database: db/production.sqlite3
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 渋谷さん変更を反映
   adapter: postgresql
   encoding: unicode
   database: mydatabase
   username: <%= ENV['USERNAME'] %>
   password: <%= ENV['PASSWORD'] %>
+<<<<<<< HEAD
   host: <%= ENV['IP'] %>
 =======
   adapter: pg
   database: db/production.pg
 >>>>>>> my work リポにローカル環境用変数をセット
+=======
+  host: <%= ENV['IP'] %>
+>>>>>>> 渋谷さん変更を反映
