@@ -61,8 +61,8 @@ class ConnecthookupController < ApplicationController
       data = { \
         :key => key \
         ,:access_token => j["access_token"] \
-        ,:refresh_token => j["refresh_token"] 
-        #,:expire => j["created_at"]+j["expires_in"]
+        ,:refresh_token => j["refresh_token"] \
+        ,:expire => Time.at(j["created_at"])+j["expires_in"].second
       }
       #begin
       

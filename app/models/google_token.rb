@@ -1,4 +1,4 @@
-class ConnectToken < ActiveRecord::Base
+class GoogleToken < ActiveRecord::Base
     
     # アクセストークンのリフレッシュ（2時間以内に定期実行）
     def refresh_token
@@ -8,9 +8,10 @@ end
 
 # == Schema Information
 #
-# Table name: connect_tokens
+# Table name: google_tokens
 #
 #  key              :string
+#  account_id       :string
 #  access_token     :string
 #  refresh_token    :string
 #  expire           :datetime
