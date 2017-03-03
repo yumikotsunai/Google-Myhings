@@ -11,9 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220112144) do
+ActiveRecord::Schema.define(version: 20170301110235) do
 
-  create_table "connectaccounts", force: :cascade do |t|
+  create_table "calendar_to_locks", force: :cascade do |t|
+    t.string   "calendar_id"
+    t.string   "lock_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "connect_accounts", force: :cascade do |t|
     t.string   "key"
     t.string   "client_id"
     t.string   "client_secret"
@@ -21,7 +28,14 @@ ActiveRecord::Schema.define(version: 20170220112144) do
     t.datetime "updated_at",    null: false
   end
 
-  create_table "connecttokens", force: :cascade do |t|
+  create_table "connect_locks", force: :cascade do |t|
+    t.string   "uuid"
+    t.string   "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "connect_tokens", force: :cascade do |t|
     t.string   "key"
     t.string   "access_token"
     t.string   "refresh_token"
@@ -30,11 +44,28 @@ ActiveRecord::Schema.define(version: 20170220112144) do
     t.datetime "updated_at",    null: false
   end
 
-  create_table "googleaccounts", force: :cascade do |t|
+  create_table "google_accounts", force: :cascade do |t|
     t.string   "key"
     t.string   "client_id"
     t.string   "client_secret"
     t.string   "calendar_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "google_calendars", force: :cascade do |t|
+    t.string   "calendar_id"
+    t.string   "account_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "google_channels", force: :cascade do |t|
+    t.string   "channel_id"
+    t.string   "calendar_id"
+    t.string   "access_token"
+    t.string   "refresh_token"
+    t.datetime "expires_in"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end

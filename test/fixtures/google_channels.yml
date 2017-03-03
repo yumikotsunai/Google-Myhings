@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  channel_id: MyString
+  calendar_id: MyString
+  access_token: MyString
+  refresh_token: MyString
+  expires_in: 2017-03-01 10:53:46
+
+two:
+  channel_id: MyString
+  calendar_id: MyString
+  access_token: MyString
+  refresh_token: MyString
+  expires_in: 2017-03-01 10:53:46

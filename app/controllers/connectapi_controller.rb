@@ -12,7 +12,7 @@ class ConnectapiController < ApplicationController
   #リフレッシュ
   def refresh
     key = "demo@remotelock.com"
-    account = Connecttoken.find_by(key: key)
+    account = ConnectToken.find_by(key: key)
     puts account
     puts account.updated_at
     o1 = account.updated_at.to_s
@@ -48,7 +48,7 @@ class ConnectapiController < ApplicationController
     }
     #puts(postbody)
     
-    authtoken = "Bearer "+ Connecttoken.find_by(key: "demo@remotelock.com").access_token
+    authtoken = "Bearer "+ ConnectToken.find_by(key: "demo@remotelock.com").access_token
     res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken )
     .post("https://api.lockstate.jp/access_persons", :ssl_context => CTX , :body => postbody.to_json)
     
@@ -95,7 +95,7 @@ class ConnectapiController < ApplicationController
       }
     }
     
-    authtoken = "Bearer "+ Connecttoken.find_by(key: "demo@remotelock.com").access_token
+    authtoken = "Bearer "+ ConnectToken.find_by(key: "demo@remotelock.com").access_token
     apiUri = "https://api.lockstate.jp/access_persons/" + access_persons_id + "/accesses"
     
     res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken)
@@ -113,7 +113,7 @@ class ConnectapiController < ApplicationController
     #ctx      = OpenSSL::SSL::SSLContext.new
     #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
     
-    authtoken = "Bearer "+ Connecttoken.find_by(key: "demo@remotelock.com").access_token
+    authtoken = "Bearer "+ ConnectToken.find_by(key: "demo@remotelock.com").access_token
     apiuri = "https://api.lockstate.jp/access_persons/" + access_persons_id + "/email/notify"
     
     res = HTTP.headers("Content-Type" => "application/json","Accept-Language" => "ja", :Authorization => authtoken )
@@ -130,7 +130,7 @@ class ConnectapiController < ApplicationController
     #ctx      = OpenSSL::SSL::SSLContext.new
     #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
     
-    authtoken = "Bearer "+ Connecttoken.find_by(key: "demo@remotelock.com").access_token
+    authtoken = "Bearer "+ ConnectToken.find_by(key: "demo@remotelock.com").access_token
     
     res = HTTP.headers(:accept => "vnd.lockstate.v1+json",:Authorization => authtoken)
     .get("https://api.lockstate.jp/devices?type=lock", :ssl_context => CTX)
