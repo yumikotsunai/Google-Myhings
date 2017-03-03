@@ -12,8 +12,6 @@ end
 #
 #  channel_id       :string
 #  calendar_id      :string
-#  access_token     :string
-#  refresh_token    :string
 #  expires_in       :datetime
 #  created_at       :datetime
 #  updated_at       :datetime
