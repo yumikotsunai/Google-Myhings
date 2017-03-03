@@ -13,6 +13,6 @@ end
 #  key              :string
 #  access_token     :string
 #  refresh_token    :string
-#  expire           :string
+#  expire           :datetime
 #  created_at       :datetime
 #  updated_at       :datetime

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170301110235) do
+ActiveRecord::Schema.define(version: 20170303021913) do
 
   create_table "calendar_to_locks", force: :cascade do |t|
     t.string   "calendar_id"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20170301110235) do
     t.string   "key"
     t.string   "access_token"
     t.string   "refresh_token"
-    t.time     "expire"
+    t.datetime "expire"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
