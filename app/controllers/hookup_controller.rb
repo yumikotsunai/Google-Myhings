@@ -106,9 +106,10 @@ class HookupController < ApplicationController
         id: SecureRandom.uuid(),
         type: 'web_hook',
         #ローカル環境
-        #address: 'https://google-demo-yumikotsunai.c9users.io/notifications/callback'
+        address: 'https://googledemo0303-rtr77.c9users.io/notifications/callback'
         #heroku環境
-        address: 'https://kkeapidemo2.herokuapp.com/notifications/callback'
+        #address: 'https://kkeapidemo2.herokuapp.com/notifications/callback'
+        
       }
     )
 	  

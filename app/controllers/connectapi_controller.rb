@@ -11,15 +11,11 @@ class ConnectapiController < ApplicationController
     
   #リフレッシュ
   def refresh
-    key = "demo@remotelock.com"
-    account = ConnectToken.find_by(key: key)
-    puts account
-    puts account.updated_at
-    o1 = account.updated_at.to_s
-    o2 = account.access_token
-    apieexec = ConnectApiExec.new
-    apieexec.refreshtoken(account)
-    txt = "更新日"+ account.updated_at.to_s + "　キー:" + account.access_token + "<br>" + "旧更新：" + o1 +"　旧キー"+ o2
+    txt = ""
+    ConnectToken.find_each do |connect_token|
+      connect_token.refresh
+      txt = txt + connect_token.status.to_s
+    end
     render :text => txt
   end
   
