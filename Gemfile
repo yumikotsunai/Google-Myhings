@@ -32,6 +32,8 @@ gem 'unicorn'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'activerecord-session_store'
+
 # Use Sidekiq
 gem 'sidekiq'
 
