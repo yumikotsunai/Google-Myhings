@@ -72,24 +72,7 @@ class HookupController < ApplicationController
   #アクセストークンを利用してチャネルを作成
   def createchannel
     
-    #(方法1)HTTPにPOSTリクエストを送る⇒こちらはCh
-    #必要なのがhttpsなのでSSLを有効にする。とりあえず証明書は無視。
-    #ctx      = OpenSSL::SSL::SSLContext.new
-    #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
-  
-    #HTTPにPOSTリクエストを送る
-    #postbody = {
-    #  "id": SecureRandom.uuid(),
-	  #  "type": "web_hook",
-	  #  "address": "https://google-demo-yumikotsunai.c9users.io/notifications/callback"
-    #}
-    #puts(postbody)
-    
-    ##HTTP.post(URL)でURLにpostリクエストを送る
-    #auth = "Bearer " + @@accessToken
-    #res = HTTP.headers("Content-Type" => "application/json",:Authorization => auth).post("https://www.googleapis.com/calendar/v3/calendars/yumikokke@gmail.com/events/watch", :ssl_context => ctx , :body => postbody.to_json)
-	  
-	  #(方法2)GoogleApiを利用する
+	  #GoogleApiを利用する
 	  client = Google::APIClient.new
 
     client.authorization.client_id = @@clientId
@@ -121,6 +104,12 @@ class HookupController < ApplicationController
 	  end
 	  
 	  puts(res.body)
+	  
+	  #カレンダーIDが含まれているURIを取得.以下は取得例
+	  #"https://www.googleapis.com/calendar/v3/calendars/i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com/events?maxResults=250&alt=json"
+	  j = ActiveSupport::JSON.decode( res.body )
+	  resourceUri = j["resourceUri"]
+   
 	  
   end
   
