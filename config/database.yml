@@ -5,18 +5,7 @@
 #   gem 'sqlite3'
 #
 default: &default
-<<<<<<< HEAD
   adapter: sqlite3
-=======
-  #デバック用
-<<<<<<< HEAD
-  adapter: sqlite3  
-  #heroku用
-  #adapter: pg
->>>>>>> my work リポにローカル環境用変数をセット
-=======
-  adapter: sqlite3
->>>>>>> adapterのデフォルトをpgに変更
   pool: 5
   timeout: 5000
 
@@ -34,21 +23,9 @@ test:
 production:
   <<: *default
   #database: db/production.sqlite3
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 渋谷さん変更を反映
   adapter: postgresql
   encoding: unicode
   database: mydatabase
   username: <%= ENV['USERNAME'] %>
   password: <%= ENV['PASSWORD'] %>
-<<<<<<< HEAD
   host: <%= ENV['IP'] %>
-=======
-  adapter: pg
-  database: db/production.pg
->>>>>>> my work リポにローカル環境用変数をセット
-=======
-  host: <%= ENV['IP'] %>
->>>>>>> 渋谷さん変更を反映
