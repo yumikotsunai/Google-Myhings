@@ -18,6 +18,11 @@ class HookupController < ApplicationController
     @@calendarId = params[:calendarId]
     @@redirectUri = params[:redirectUri]
     
+    #以下だと、入力文字列が認識されないようなのでコメントアウト
+    #@@clientId = APP_CONFIG["google"]["client"] || params[:clientId].presence
+    #@@clientSecret = APP_CONFIG["google"]["secret"] || params[:clientSecret]
+    #@@calendarId = APP_CONFIG["google"]["calendar_id"] || params[:calendarId]
+    #@@redirectUri = APP_CONFIG["webhost"]+'hookup/callback' || params[:redirectUri]
     
     #google認証のURLにリダイレクト
     url = 'https://accounts.google.com/o/oauth2/auth?client_id=' + @@clientId + '&redirect_uri=' + @@redirectUri + 
@@ -81,11 +86,7 @@ class HookupController < ApplicationController
       body_object: {
         id: SecureRandom.uuid(),
         type: 'web_hook',
-        #ローカル環境
-        address: APP_CONFIG["webhost"]+'/notifications/callback'
-        #heroku環境
-        #address: 'https://kkeapidemo2.herokuapp.com/notifications/callback'
-        
+        address: URI.encode(APP_CONFIG["webhost"]+'notifications/callback')
       }
     )
 	  
