@@ -51,9 +51,6 @@ class HookupController < ApplicationController
   def callback
     #引数(=コード)を取得
     code = params[:code]
-    #puts(@@clientId)
-    #puts(@@clientSecret)
-    #puts(@@redirectUri)
     
     #クライアントID,クライアントシークレット,承認済みのリダイレクトURI,コードから、リフレッシュトークンとアクセストークンを取得
     postbody = {
@@ -66,17 +63,31 @@ class HookupController < ApplicationController
     
     #HTTP.post(URL)でURLにpostリクエストを送る
     res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded").post("https://accounts.google.com/o/oauth2/token", :form => postbody )
-	  #puts(res)
 	  
-	  res_json = JSON.parse res
-	  #puts(res_json)
-	  @@accessToken = res_json["access_token"]
-	  @@refreshToken = res_json["refresh_token"]
-	  #puts(@@accessToken)
-	  #puts(@@refreshToken)
+	  if res.code.to_s == "200"
+	    
+  	  j = ActiveSupport::JSON.decode( res )
+  	  
+  	  
+  	  @@accessToken = j["access_token"]
+  	  @@refreshToken = j["refresh_token"]
+  	  @@expiresIn = Time.now + j["expires_in"].second   # expires_in => 3600秒(1時間)
+  	  
+  	  key = "demo@remotelock.com"
+  	  #if GoogleToken.find_by(key: @@clientId) == nil
+        googleToken = GoogleToken.new(key: @@clientId, account_id: @@clientId, access_token: @@accessToken, refresh_token:@@refreshToken )#, expire:@@expiresIn
+        googleToken.save
+      #end
+      
+      debugger
+  	  
+    
+  	else
+  	  puts "Googleアクセストークンの取得に失敗しました。"
+  	end
 	  
+	  #アクセストークンを利用してチャネルを作成
 	  createchannel
-	  
 	  render action: 'createchannel'
 	  
   end
@@ -85,9 +96,10 @@ class HookupController < ApplicationController
   #アクセストークンを利用してチャネルを作成
   def createchannel
     
+    #refresh_token = GoogleToken.find_by(account_id: @@clientId).refresh_token
+    
 	  #GoogleApiを利用する
 	  client = Google::APIClient.new
-
     client.authorization.client_id = @@clientId
     client.authorization.client_secret = @@clientSecret
     client.authorization.refresh_token = @@refreshToken
