@@ -86,8 +86,7 @@ class HookupController < ApplicationController
       body_object: {
         id: SecureRandom.uuid(),
         type: 'web_hook',
-        #address: URI.encode(APP_CONFIG["webhost"]+'notifications/callback')
-        address: URI.encode('https://kkeapidemo2.herokuapp.com/notifications/callback')
+        address: URI.encode(APP_CONFIG["webhost"]+'notifications/callback')
       }
     )
 	  
