@@ -1,7 +1,7 @@
 class GoogleToken < ActiveRecord::Base
     
     # アクセストークンのリフレッシュ（2時間以内に定期実行）
-    def refresh_token
+    def refresh
         # ここに処理を記述
     end
 end

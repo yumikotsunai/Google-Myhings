@@ -1,0 +1,20 @@
+<div style= "text-align:center;line-height:100%;padding:10px;">
+  <h2>GoogleCalendarとConnectシステムを連携します</h2>
+  <p>以下に、LockState Connectの情報を入力してください</p>
+</div>
+
+<div style= "text-align:center;line-height:100%;padding:50px;">
+  <!--getcode.htmlに送信-->
+  <%= form_tag connecthookup_getcode_path do %>
+  
+    <p>クライアントID</p>
+    <input type="text" class="form-control title-field" name="clientId" style="width:500px">
+    <p>シークレット</p>
+    <input type="text" class="form-control title-field" name="clientSecret" style="width:500px">
+    <p>UUID</p>
+    <input type="text" class="form-control title-field" name="uuId" style="width:500px">
+    
+    <input type="submit" value="送信" class="btn primary-btn">
+  
+  <%end%>
+</div>

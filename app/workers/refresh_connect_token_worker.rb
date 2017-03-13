@@ -4,7 +4,7 @@ class RefreshConnectTokenWorker
   def perform
     # LS Connectのアクセストークンを順次参照
     ConnectToken.find_each do |connect_token|
-      connect_token.refresh_token
+      connect_token.refresh
     end
     
     puts Date.today.to_time

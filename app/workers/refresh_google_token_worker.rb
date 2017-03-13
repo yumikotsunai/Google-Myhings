@@ -4,7 +4,7 @@ class RefreshGoogleTokenWorker
   def perform
     # GoogleAccountのアクセストークンを順次参照
     GoogleToken.find_each do |google_token|
-      google_token.refresh_token
+      google_token.refresh
     end
     
     puts Date.today.to_time

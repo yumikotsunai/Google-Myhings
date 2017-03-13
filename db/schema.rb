@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170306075203) do
+ActiveRecord::Schema.define(version: 20170308024251) do
 
   create_table "calendar_to_locks", force: :cascade do |t|
     t.string   "calendar_id"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20170306075203) do
     t.datetime "expire"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "status"
   end
 
   create_table "google_accounts", force: :cascade do |t|
@@ -79,5 +80,15 @@ ActiveRecord::Schema.define(version: 20170306075203) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string   "session_id", null: false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true
+  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at"
 
 end

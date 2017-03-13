@@ -20,9 +20,16 @@ Rails.application.routes.draw do
   get 'connecthookup/new'
   post 'connecthookup/new'
   
+  get 'connecthookup/setup'
+  post 'connecthookup/getcode'
+  
   get 'connecthookup/callback'
   post 'connecthookup/callback'
 
+  get 'connectapi/refresh'
+  post 'connectapi/refresh'
+  
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
