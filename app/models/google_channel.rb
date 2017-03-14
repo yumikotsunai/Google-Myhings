@@ -1,8 +1,11 @@
 class GoogleChannel < ActiveRecord::Base
 
     # チャネル更新（1週間以内に定期実行）
-    def update_channel
+    def refresh
         # ここに処理を記述
+    end
+    
+    def delete
     end
 end
 

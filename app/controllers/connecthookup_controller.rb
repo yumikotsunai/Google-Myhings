@@ -8,17 +8,21 @@ class ConnecthookupController < ApplicationController
   
   def setup
     #認証情報の入力画面
-    session[:_id]
+    #print "セッション"
+    #print session["session_id"]
+    #session[:test]="テスト"
+    #hensuu = Session.find_by(:session_id => session[:session_id])
+    #print session["test"]
   end
     
   def getcode
-    key = 	APP_CONFIG["connect"]["user_name"]
+    @@key = 	params[:email].presence	|| APP_CONFIG["connect"]["user_name"]
     @@client =	params[:clientId].presence || APP_CONFIG["connect"]["client"]
     @@secret =	params[:clientSecret].presence || APP_CONFIG["connect"]["secret"]
     @@callbackuri = URI.encode(APP_CONFIG["webhost"]+'connecthookup/callback')
     #params[:uuId]
     
-    if ConnectAccount.find_by(key: key) == nil
+    if ConnectAccount.find_by(key: @@key) == nil
       account = ConnectAccount.new(key: key,client_id: @@client,client_secret: @@secret)
       account.save
     end
@@ -29,10 +33,6 @@ class ConnecthookupController < ApplicationController
 
   #トークンの受取り
   def callback
-    #必要なのがhttpsなのでSSLを有効にする。とりあえず証明書は無視。
-    #ctx = OpenSSL::SSL::SSLContext.new
-    #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    
     tmp_token = params[:code]
     postform = {'code' => tmp_token \
     ,'client_id' => @@client \
@@ -53,7 +53,7 @@ class ConnecthookupController < ApplicationController
       require 'time'
       #require 'date'
       #Time.now.strftime("%Y年 %m月 %d日, %H:%M:%S")
-      key =	APP_CONFIG["connect"]["user_name"]
+      key =	@@key
       data = { \
         :key => key \
         ,:access_token => j["access_token"] \
@@ -83,10 +83,16 @@ class ConnecthookupController < ApplicationController
   end
   
   def selectlock
-  end
-  
-  def deflock
-   
+    res = ConnectApiExec.getlocks( @@key )
+    @locks = [["名前","Wi-Fi接続レベル","デバイスID"]] 
+    res['data'].each do |lock|
+      @locks.append( [lock["attributes"]["name"],lock["attributes"]["wifi_level"],lock["id"]] )
+      if ConnectLock.find_by(:uuid => lock["id"]) == nil
+        lockrecord = ConnectLock.new(:uuid => lock["id"],:account_id => @@client )
+        lockrecord.save
+      end
+    end
+    render
   end
   
 end

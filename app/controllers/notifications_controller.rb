@@ -13,7 +13,6 @@ class NotificationsController < ApplicationController
   @@startStr = ""
   @@endStr = ""
   
-  
   #push notificationの受取り
   def callback
     
@@ -21,7 +20,7 @@ class NotificationsController < ApplicationController
 	  puts(@@count) 
 	  
     #googleCalendarからのrequest情報
-    channelId = request.headers["HTTP_X_GOOG_CHANNEL_ID"]
+    channelId = request.headers["HTTP_X_GOOG_CHANNEL_ID"]#これで判定する。
     resourceId = request.headers["HTTP_X_GOOG_RESOURCE_ID"]
     
 	  #不要なchannelの削除
@@ -129,19 +128,14 @@ class NotificationsController < ApplicationController
   
   #ConnectApiメソッド呼出し
   def callconnectapi(email, addemail, startStr, endStr)
-    
     if @@email != email or @@startStr != startStr or @@endStr != endStr
-      
-      #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00を削除）
+      #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00 の文字列を削除(JST)）
       #startDatetime = startStr.to_datetime - Rational(9, 24)  
       startAt = startStr.slice(0,19)
-        
       #endDatetime = endStr.to_datetime - Rational(9, 24)  
       endAt = endStr.slice(0,19)
-      
       #ConnectAPIの呼出し
-      connectApi = ConnectapiController.new
-        
+      connectApi = ConnectApiExec.new
       #アクセスゲストの作成
       connectApi.createguests(addemail,startAt,endAt)
     end 
