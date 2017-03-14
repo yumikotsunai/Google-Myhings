@@ -73,9 +73,9 @@ class HookupController < ApplicationController
   	  @@refreshToken = j["refresh_token"]
   	  @@expiresIn = Time.now + j["expires_in"].second   # expires_in => 3600秒(1時間)
   	  
-  	  key = "demo@remotelock.com"
+  	  key = "kke.remotelock@gmail.com"
   	  #if GoogleToken.find_by(key: @@clientId) == nil
-        googleToken = GoogleToken.new(key: @@clientId, account_id: @@clientId, access_token: @@accessToken, refresh_token:@@refreshToken )#, expire:@@expiresIn
+        googleToken = GoogleToken.new(key: key, account_id: @@clientId, access_token: @@accessToken, refresh_token:@@refreshToken, expire:@@expiresIn )
         googleToken.save
       #end
       
@@ -96,7 +96,8 @@ class HookupController < ApplicationController
   #アクセストークンを利用してチャネルを作成
   def createchannel
     
-    #refresh_token = GoogleToken.find_by(account_id: @@clientId).refresh_token
+    refresh_token = GoogleToken.find_by(account_id: @@clientId).refresh_token
+    debugger
     
 	  #GoogleApiを利用する
 	  client = Google::APIClient.new
