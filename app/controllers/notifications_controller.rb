@@ -13,6 +13,7 @@ class NotificationsController < ApplicationController
   @@startStr = ""
   @@endStr = ""
   
+  @@googleAccountId = APP_CONFIG["google"]["user_name"]
   
   #push notificationの受取り
   def callback
@@ -25,25 +26,28 @@ class NotificationsController < ApplicationController
     resourceId = request.headers["HTTP_X_GOOG_RESOURCE_ID"]
     
 	  #不要なchannelの削除
-	  #hookupクラスインスタンスの初期化
-    #hookup = HookupController.new
-    #accessToken = hookup.dispAccessToken
+	  #deletechannel( channelId, resourceId )
+    
+    #イベント情報の取得
+	  getevent
+	  
+  end
+  
+  #不要なchannelの削除
+  def deletechannel( channelId, resourceId )
+    accessToken = GoogleToken.find_by(account_id: @@googleAccountId).access_token
 	  
     postbody = {
       "id": channelId,
       "resourceId": resourceId,
     }
     
-    #auth = "Bearer " + accessToken
-    #res = HTTP.headers("Content-Type" => "application/json",:Authorization => auth)
-    #.post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => CTX , :body => postbody.to_json)
+    auth = "Bearer " + accessToken
+    res = HTTP.headers("Content-Type" => "application/json",:Authorization => auth)
+    .post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => CTX , :body => postbody.to_json)
     
-    #puts("channel削除")
-    #puts(res.code)
-    
-    #イベント情報の取得
-	  getevent
-	  
+    puts("channel削除")
+    puts(res.code)
   end
   
   
@@ -54,12 +58,15 @@ class NotificationsController < ApplicationController
     hookup = HookupController.new
     
     #クラス変数の値取得
-    clientId = hookup.dispClientId
-    clientSecret = hookup.dispClientSecret
-    #redirectUri = hookup.dispRedirectUri
-    calendarId = hookup.dispCalendarId
-    #accessToken = hookup.dispAccessToken
-    refreshToken = hookup.dispRefreshToken
+    #clientId = hookup.dispClientId
+    #clientSecret = hookup.dispClientSecret
+    #calendarId = hookup.dispCalendarId
+    #refreshToken = hookup.dispRefreshToken
+    
+    clientId = GoogleAccount.find_by(account_id: @@googleAccountId).client_id
+    clientSecret = GoogleAccount.find_by(account_id: @@googleAccountId).client_secret
+    calendarId = GoogleAccount.find_by(account_id: @@googleAccountId).calendar_id
+    refreshToken = GoogleToken.find_by(account_id: @@googleAccountId).refresh_token
     
     #GoogleApiイベントメソッド呼出し
     client = Google::APIClient.new
@@ -109,7 +116,6 @@ class NotificationsController < ApplicationController
         attendees = item["attendees"]
         if !attendees.blank?
           attendees.each do |attendee|
-            debugger
             addemail = attendee["email"]
             callconnectapi(email, addemail, startStr, endStr)
           end
@@ -140,7 +146,7 @@ class NotificationsController < ApplicationController
       endAt = endStr.slice(0,19)
       
       #ConnectAPIの呼出し
-      connectApi = ConnectapiController.new
+      connectApi = ConnectApiExec.new
         
       #アクセスゲストの作成
       connectApi.createguests(addemail,startAt,endAt)
