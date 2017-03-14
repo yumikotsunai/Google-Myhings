@@ -8,6 +8,7 @@ development:
         secret: "721cbf34fc3ff3d5f9033d3dd765fb351095c75b7cde403533295b3c495dd4cd"
         uuid: "b9fdcd0c-3713-4043-b7a6-3501bc9832ad"
     google:
+        user_name: "kke.remotelock@gmail.com"
         client: "404180661728-qotv9so92qt4pp6s7v9jlmheik6bespe.apps.googleusercontent.com"
         secret: "ZS6_pVing3DInTzpJ7c3QpJ"
         calendar_id: "g8ukpibvlfle41hplt1g3rplu0@group.calendar.google.com"
@@ -23,6 +24,7 @@ production:
         secret: "721cbf34fc3ff3d5f9033d3dd765fb351095c75b7cde403533295b3c495dd4cd"
         uuid: "b9fdcd0c-3713-4043-b7a6-3501bc9832ad"
     google:
+        user_name: "kke.remotelock@gmail.com"
         client: "404180661728-qotv9so92qt4pp6s7v9jlmheik6bespe.apps.googleusercontent.com"
         secret: "ZS6_pVing3DInTzpJ7c3QpJ"
         calendar_id: "g8ukpibvlfle41hplt1g3rplu0@group.calendar.google.com"

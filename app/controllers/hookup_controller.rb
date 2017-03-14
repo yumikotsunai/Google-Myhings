@@ -1,5 +1,6 @@
 require 'http'
 require 'google/api_client'
+require 'date'
 
 #GoogleCalendarのAOuth認証
 class HookupController < ApplicationController
@@ -13,6 +14,7 @@ class HookupController < ApplicationController
   
   #上記変数を受取る
   def getcode
+    
     @@clientId = params[:clientId]
     @@clientSecret = params[:clientSecret]
     @@calendarId = params[:calendarId]
@@ -48,16 +50,25 @@ class HookupController < ApplicationController
     res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded").post("https://accounts.google.com/o/oauth2/token", :form => postbody )
 	  #puts(res)
 	  
-	  res_json = JSON.parse res
-	  #puts(res_json)
-	  @@accessToken = res_json["access_token"]
-	  @@refreshToken = res_json["refresh_token"]
-	  #puts(@@accessToken)
-	  #puts(@@refreshToken)
-	  
-	  createchannel
-	  
-	  render action: 'createchannel'
+	  if res.code != 200
+	    render res
+	  else
+  	  res_json = JSON.parse res
+  	  #puts(res_json)
+  	  @@accessToken = res_json["access_token"]
+  	  @@refreshToken = res_json["refresh_token"]
+  	  #puts(@@accessToken)
+  	  #puts(@@refreshToken)
+  	  
+  	  #GoogleAccount/new/save
+  	  ga = GoogleAccount.new(:key => APP_CONFIG["google"]["user_name"],:client_id => @@clientId ,:client_secret => @@clientSecret,:calendar_id => @@calendarId)
+  	  ga.save
+  	  
+  	  createchannel
+  	  
+  	  render action: 'createchannel'
+    end	
+
 	  
   end
   
@@ -110,6 +121,12 @@ class HookupController < ApplicationController
 	  
 	  if res.status.to_s == "200"
       @status = "認証に成功しました"
+      #チャネルのIDと、カレンダーIDの対応を保存
+      channel_id = ""
+      calendar_id = @@calendarId
+      expires_in = DateTime.now + 7.day
+      channel = GoogleChannel.new(:channel_id => channel_id ,:calendar_id => calendar_id,:expires_in => expires_in )
+      channel.save
     else
 	  	@status = "認証に失敗しました"
 	  end

@@ -25,6 +25,11 @@ Rails.application.routes.draw do
   
   get 'connecthookup/callback'
   post 'connecthookup/callback'
+  
+  get 'connecthookup/selectlock'
+  post 'pairs/decide'
+  get 'pairs/finish'
+  get 'pairs/failed'
 
   get 'connectapi/refresh'
   post 'connectapi/refresh'
