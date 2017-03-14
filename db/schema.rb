@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309082100) do
+ActiveRecord::Schema.define(version: 20170314100722) do
 
   create_table "calendar_to_locks", force: :cascade do |t|
     t.string   "calendar_id"
@@ -51,12 +51,13 @@ ActiveRecord::Schema.define(version: 20170309082100) do
   end
 
   create_table "google_accounts", force: :cascade do |t|
-    t.string   "key"
     t.string   "client_id"
     t.string   "client_secret"
     t.string   "calendar_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "account_id"
+    t.string   "redirect_uri"
   end
 
   create_table "google_api_execs", force: :cascade do |t|
@@ -82,13 +83,13 @@ ActiveRecord::Schema.define(version: 20170309082100) do
   end
 
   create_table "google_tokens", force: :cascade do |t|
-    t.string   "key"
     t.string   "account_id"
     t.string   "access_token"
     t.string   "refresh_token"
     t.datetime "expire"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "status"
   end
 
   create_table "sessions", force: :cascade do |t|
