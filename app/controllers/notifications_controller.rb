@@ -8,6 +8,9 @@ class NotificationsController < ApplicationController
   # この↓一文がないとCSRF(Cross-Site Request Forgery)チェックでこけるので、APIをやりとりしているControllerには必要
   skip_before_filter :verify_authenticity_token
   
+  #kke.remotelock@gmail.com
+  @@googleAccountId = APP_CONFIG["google"]["user_name"]
+  
   @@count = 0
   @@email = ""
   @@startStr = ""
@@ -23,26 +26,30 @@ class NotificationsController < ApplicationController
     channelId = request.headers["HTTP_X_GOOG_CHANNEL_ID"]#これで判定する。
     resourceId = request.headers["HTTP_X_GOOG_RESOURCE_ID"]
     
-	  #不要なchannelの削除
-	  #hookupクラスインスタンスの初期化
-    #hookup = HookupController.new
-    #accessToken = hookup.dispAccessToken
+    #不要なchannelの削除
+	  #deletechannel( channelId, resourceId )
+    
+    #イベント情報の取得
+	  getevent
+	  
+  end
+  
+  
+  #不要なchannelの削除
+  def deletechannel( channelId, resourceId )
+    accessToken = GoogleToken.find_by(account_id: @@googleAccountId).access_token
 	  
     postbody = {
       "id": channelId,
       "resourceId": resourceId,
     }
     
-    #auth = "Bearer " + accessToken
-    #res = HTTP.headers("Content-Type" => "application/json",:Authorization => auth)
-    #.post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => CTX , :body => postbody.to_json)
+    auth = "Bearer " + accessToken
+    res = HTTP.headers("Content-Type" => "application/json",:Authorization => auth)
+    .post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => CTX , :body => postbody.to_json)
     
-    #puts("channel削除")
-    #puts(res.code)
-    
-    #イベント情報の取得
-	  getevent
-	  
+    puts("channel削除")
+    puts(res.code)
   end
   
   
@@ -52,13 +59,14 @@ class NotificationsController < ApplicationController
     #hookupクラスインスタンスの初期化
     hookup = HookupController.new
     
-    #クラス変数の値取得
-    clientId = hookup.dispClientId
-    clientSecret = hookup.dispClientSecret
-    #redirectUri = hookup.dispRedirectUri
-    calendarId = hookup.dispCalendarId
-    #accessToken = hookup.dispAccessToken
-    refreshToken = hookup.dispRefreshToken
+    clientId = GoogleAccount.find_by(account_id: @@googleAccountId).client_id
+    clientSecret = GoogleAccount.find_by(account_id: @@googleAccountId).client_secret
+    calendarId = GoogleAccount.find_by(account_id: @@googleAccountId).calendar_id
+    refreshToken = GoogleToken.find_by(account_id: @@googleAccountId).refresh_token
+    
+    #カレンダーIDに紐付いたデバイスIDを取得
+    #エラーがでるのでとりあえずコメントアウト
+    #lock_id = CalendarToLock.find_by(calendarId: calendarId).lock_id
     
     #GoogleApiイベントメソッド呼出し
     client = Google::APIClient.new
@@ -108,7 +116,6 @@ class NotificationsController < ApplicationController
         attendees = item["attendees"]
         if !attendees.blank?
           attendees.each do |attendee|
-            debugger
             addemail = attendee["email"]
             callconnectapi(email, addemail, startStr, endStr)
           end
@@ -135,10 +142,10 @@ class NotificationsController < ApplicationController
       #endDatetime = endStr.to_datetime - Rational(9, 24)  
       endAt = endStr.slice(0,19)
       #ConnectAPIの呼出し
-      connectApi = ConnectApiExec.new
+      #connectApi = ConnectApiExec.new
       #アクセスゲストの作成
-      connectApi.createguests(addemail,startAt,endAt)
-    end 
+      ConnectApiExec.createguests(addemail,startAt,endAt,lock_id)
+    end
   end
   
 end

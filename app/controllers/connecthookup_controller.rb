@@ -23,7 +23,7 @@ class ConnecthookupController < ApplicationController
     #params[:uuId]
     
     if ConnectAccount.find_by(key: @@key) == nil
-      account = ConnectAccount.new(key: key,client_id: @@client,client_secret: @@secret)
+      account = ConnectAccount.new(key: @@key,client_id: @@client,client_secret: @@secret)
       account.save
     end
     

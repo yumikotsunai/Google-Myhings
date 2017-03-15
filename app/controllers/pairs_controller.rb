@@ -1,6 +1,6 @@
 class PairsController < ApplicationController
     def decide
-        g = GoogleAccount.find_by(:key => APP_CONFIG["google"]["user_name"] )
+        g = GoogleAccount.find_by(:account_id => APP_CONFIG["google"]["user_name"] )
         #カレンダaccount_id
         c2l = CalendarToLock.new(:calendar_id => g.calendar_id ,:lock_id => params[:lockid])
         c2l.save
