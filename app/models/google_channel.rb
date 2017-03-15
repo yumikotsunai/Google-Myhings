@@ -55,6 +55,8 @@ class GoogleChannel < ActiveRecord::Base
           puts self
           puts res
     	end
+    	
+    	return @status
     end
     
     
