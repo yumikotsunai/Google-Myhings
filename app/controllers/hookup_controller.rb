@@ -65,7 +65,6 @@ class HookupController < ApplicationController
     #channel作成
     googleChannel = GoogleChannel.new
     @status = googleChannel.update
-    debugger
     
   end
   

@@ -65,9 +65,8 @@ class NotificationsController < ApplicationController
     refreshToken = GoogleToken.find_by(account_id: @@googleAccountId).refresh_token
     
     #カレンダーIDに紐付いたデバイスIDを取得
-    #エラーがでるのでとりあえずコメントアウト
-    #lock_id = CalendarToLock.find_by(calendarId: calendarId).lock_id
-    
+    lockId = CalendarToLock.find_by(calendar_id: calendarId).lock_id
+    debugger
     #GoogleApiイベントメソッド呼出し
     client = Google::APIClient.new
     client.authorization.client_id = clientId
@@ -110,14 +109,14 @@ class NotificationsController < ApplicationController
         end 
         
         #登録ユーザのアクセス権を取得
-        callconnectapi(email, email, startStr, endStr)
+        callconnectapi(email, email, startStr, endStr, lockId)
         
         #追加メンバーのアクセス権を取得
         attendees = item["attendees"]
         if !attendees.blank?
           attendees.each do |attendee|
             addemail = attendee["email"]
-            callconnectapi(email, addemail, startStr, endStr)
+            callconnectapi(email, addemail, startStr, endStr, lockId)
           end
         end
       end
@@ -134,7 +133,7 @@ class NotificationsController < ApplicationController
   
   
   #ConnectApiメソッド呼出し
-  def callconnectapi(email, addemail, startStr, endStr)
+  def callconnectapi(email, addemail, startStr, endStr, lockId)
     if @@email != email or @@startStr != startStr or @@endStr != endStr
       #ISO 8601時刻で日本時刻を世界時刻に変更（タイムゾーン+09:00 の文字列を削除(JST)）
       #startDatetime = startStr.to_datetime - Rational(9, 24)  
@@ -144,7 +143,7 @@ class NotificationsController < ApplicationController
       #ConnectAPIの呼出し
       #connectApi = ConnectApiExec.new
       #アクセスゲストの作成
-      ConnectApiExec.createguests(addemail,startAt,endAt,lock_id)
+      ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
     end
   end
   

@@ -13,7 +13,7 @@ class ConnectApiExec
     end
     
     #アクセスゲスト作成
-    def self.createguests(email="名無し", statAt="2017-01-24T16:04:00", endAt="2017-01-25T16:04:00")
+    def self.createguests(email="名無し", statAt="2017-01-24T16:04:00", endAt="2017-01-25T16:04:00", lockId="a890e645-efa3-4f01-a234-97777c355313")
         
         #PINコード番号のランダム生成
         pin = (0..9).sort_by{rand}[0,6].join.to_s

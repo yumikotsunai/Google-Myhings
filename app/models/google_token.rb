@@ -39,7 +39,6 @@ class GoogleToken < ActiveRecord::Base
             puts self
             puts res
         end
-        debugger
     end
     
     
