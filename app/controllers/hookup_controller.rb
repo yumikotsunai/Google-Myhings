@@ -43,12 +43,17 @@ class HookupController < ApplicationController
   
   #google認証後のリダイレクト先URI
   def callback
-    #引数(=コード)を取得
+    #引数(=コード)を取得して、DBを更新
     code = params[:code]
+    if GoogleAccount.find_by(account_id: @@googleAccountId) != nil
+      result = GoogleAccount.where(:account_id => @@googleAccountId).update_all(:code => code)
+    end
     
+    #　↓以下の処理をmodelのGoogleTokenクラスへ移動
     clientId = GoogleAccount.find_by(account_id: @@googleAccountId).client_id
     clientSecret = GoogleAccount.find_by(account_id: @@googleAccountId).client_secret
     redirectUri = GoogleAccount.find_by(account_id: @@googleAccountId).redirect_uri
+    code = GoogleAccount.find_by(account_id: @@googleAccountId).code
     
     #クライアントID,クライアントシークレット,承認済みのリダイレクトURI,コードから、リフレッシュトークンとアクセストークンを取得
     postbody = {
@@ -63,25 +68,20 @@ class HookupController < ApplicationController
     res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded").post("https://accounts.google.com/o/oauth2/token", :form => postbody )
 	  
   	if res.code.to_s == "200"
-  	    
     	j = ActiveSupport::JSON.decode( res )
-    	  
     	@@accessToken = j["access_token"]
     	@@refreshToken = j["refresh_token"]
     	@@expiresIn = Time.now + j["expires_in"].second   # expires_in => 3600秒(1時間)
     	  
     	#GoogleTokenテーブルに値を保存
-    	#if GoogleToken.find_by(key: @@clientId) == nil
       googleToken = GoogleToken.new(account_id: @@googleAccountId, access_token: @@accessToken, refresh_token:@@refreshToken, expire:@@expiresIn )
       googleToken.save
-      #end
-        
     else
       puts "Googleアクセストークンの取得に失敗しました。"
     end
+    #　↑以上の処理をmodelのGoogleTokenクラスへ移動
   	  
   	createchannel
-  	  
   	render action: 'createchannel'
 
   end
@@ -90,6 +90,7 @@ class HookupController < ApplicationController
   #アクセストークンを利用してチャネルを作成
   def createchannel
     
+    #　↓以下の処理をmodelのGoogleChannelクラスへ移動
     clientId = GoogleAccount.find_by(account_id: @@googleAccountId).client_id
     clientSecret = GoogleAccount.find_by(account_id: @@googleAccountId).client_secret
     refreshToken = GoogleToken.find_by(account_id: @@googleAccountId).refresh_token
@@ -117,28 +118,20 @@ class HookupController < ApplicationController
 	  @status = res.status
 	  
 	  if res.status.to_s == "200"
+	    puts(res.body)
       @status = "認証に成功しました"
-      #チャネルのIDと、カレンダーIDの対応を保存
-      #channel_id = ""
-      #calendar_id = @@calendarId
-      #expires_in = DateTime.now + 7.day
-      #channel = GoogleChannel.new(:channel_id => channel_id ,:calendar_id => calendar_id,:expires_in => expires_in )
-      #channel.save
       
-      #カレンダーIDが含まれているURIを取得.以下は取得例
-  	  #"https://www.googleapis.com/calendar/v3/calendars/i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com/events?maxResults=250&alt=json"
   	  j = ActiveSupport::JSON.decode( res.body )
-  	  resourceUri = j["resourceUri"]
+  	  #resourceUri = j["resourceUri"]　#カレンダーIDが含まれているURIを取得."https://www.googleapis.com/calendar/v3/calendars/i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com/events?maxResults=250&alt=json"
 	    
       #チャネルのIDと、カレンダーIDの対応を保存
-      googleChannel = GoogleChannel.new(channel_id: j["id"], calendar_id: calendarId, access_token: "", refresh_token: refreshToken, expires_in: DateTime.now + 7.day )
+      googleChannel = GoogleChannel.new(channel_id: j["id"], calendar_id: calendarId, access_token: "", refresh_token: refreshToken, expires_in: DateTime.now + 7.day, resource_id: j["resourceId"] )
       googleChannel.save
-      
+      debugger
     else
 	  	@status = "認証に失敗しました"
 	  end
-	  
-	  puts(res.body)
+	  #　↑以上の処理をmodelのGoogleChannelクラスへ移動
 	  
   end
   
