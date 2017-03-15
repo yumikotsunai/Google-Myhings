@@ -1,7 +1,7 @@
 class GoogleChannel < ActiveRecord::Base
 
     # チャネル更新（1週間以内に定期実行）
-    def refresh
+    def update
         # ここに処理を記述
         googleAccountId = APP_CONFIG["google"]["user_name"]
         clientId = GoogleAccount.find_by(account_id: googleAccountId).client_id
