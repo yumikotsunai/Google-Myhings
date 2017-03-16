@@ -36,6 +36,7 @@ gem 'activerecord-session_store'
 
 # Use Sidekiq
 gem 'sidekiq'
+gem 'sidetiq'
 
 group :development, :test do
   gem 'sqlite3'
