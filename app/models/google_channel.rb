@@ -31,8 +31,6 @@ class GoogleChannel < ActiveRecord::Base
     	  
     	@status = res.status
     	
-    	debugger
-    	
     	if res.status.to_s == "200"
     	    puts(res.body)
           @status = "認証に成功しました"

@@ -37,8 +37,6 @@ class GoogleToken < ActiveRecord::Base
         	#self.status = 1
         	self.save
         	
-    	    debugger
-    	
         else
             #self.status = 0
             puts "Googleアクセストークンの更新に失敗しました。"
