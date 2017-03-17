@@ -6,8 +6,8 @@ class GoogleChannel < ActiveRecord::Base
         googleAccountId = APP_CONFIG["google"]["user_name"]
         clientId = GoogleAccount.find_by(account_id: googleAccountId).client_id
         clientSecret = GoogleAccount.find_by(account_id: googleAccountId).client_secret
-        #refreshToken = GoogleToken.find_by(account_id: googleAccountId).refresh_token
-        refreshToken = "1/pdYsrCvJ5_WnjQDtDGajZMuSQFSh5-DohNH5qtXMrCM"
+        refreshToken = GoogleToken.find_by(account_id: googleAccountId).refresh_token
+        #refreshToken = "1/pdYsrCvJ5_WnjQDtDGajZMuSQFSh5-DohNH5qtXMrCM"
         calendarId = GoogleAccount.find_by(account_id: googleAccountId).calendar_id
         
     	#GoogleApiを利用する
