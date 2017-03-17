@@ -13,7 +13,7 @@ class ConnectApiExec
     end
     
     #アクセスゲスト作成
-    def self.createguests(email="名無し", statAt="2017-01-24T16:04:00", endAt="2017-01-25T16:04:00", lockId="a890e645-efa3-4f01-a234-97777c355313")
+    def self.createguests(email="名無し", statAt="2017-01-24T16:04:00", endAt="2017-01-25T16:04:00", lockId="c744baed-9b63-4b73-bbcc-a5406ebdd8ae")
         
         #PINコード番号のランダム生成
         pin = (0..9).sort_by{rand}[0,6].join.to_s
@@ -32,48 +32,24 @@ class ConnectApiExec
             "email": email
           }
         }
-        #puts(postbody)
         
         authtoken = "Bearer "+ ConnectToken.find_by(key: "demo@remotelock.com").access_token
         res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken )
         .post("https://api.lockstate.jp/access_persons", :ssl_context => CTX , :body => postbody.to_json)
         
-        puts("アクセスゲスト作成")
-        puts(res.body)
+        return res
         
-        res_hash = ActiveSupport::JSON.decode(res.body)
-        data = res_hash["data"]
-        user_id = data["id"]
-        
-        #ロックと紐付け
-        appendguest2lock(user_id)
-        
-        #メール送信
-        sendemail(user_id)
-        
-        #if res.headers['code'] != '200' then
-        #  puts("失敗")
-        #  puts res.body
-        #  puts res.headers
-        #  puts res.headers['HTTP_STATUS_CODES']
-        #else
-        #  puts("成功")
-        #  @res = ActiveSupport::JSON.decode(res.body)
-        #  puts(@res["data"])
-        #  render
-        #end
-        #puts @res
     end
   
     
     #アクセスゲストにロック権限を追加
-    def appendguest2lock(access_persons_id = "0905462f-1a3c-45fd-a330-85c0865d5ef5")
+    def self.appendguest2lock(access_persons_id = "0905462f-1a3c-45fd-a330-85c0865d5ef5", lockId = "c744baed-9b63-4b73-bbcc-a5406ebdd8ae")
         #ctx = OpenSSL::SSL::SSLContext.new
         #ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
         
         postbody = {
           "attributes": {
-            "accessible_id": "a890e645-efa3-4f01-a234-97777c355313",
+            "accessible_id": lockId,
             "accessible_type": "lock",
           }
         }
@@ -84,21 +60,19 @@ class ConnectApiExec
         res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken)
         .post(apiUri, :ssl_context => CTX , :body => postbody.to_json)
         
-        puts("ロック権限追加")
-        puts res
+        return res
     end
     
     
     #アクセスゲストにメールを送信
-    def sendemail(access_persons_id = "0905462f-1a3c-45fd-a330-85c0865d5ef5")
+    def self.sendemail(access_persons_id = "0905462f-1a3c-45fd-a330-85c0865d5ef5")
         authtoken = "Bearer "+ ConnectToken.find_by(key: APP_CONFIG["connect"]["user_name"]).access_token
         apiuri = "https://api.lockstate.jp/access_persons/" + access_persons_id + "/email/notify"
         
         res = HTTP.headers("Content-Type" => "application/json","Accept-Language" => "ja", :Authorization => authtoken )
         .post(apiuri, :ssl_context => CTX)
         
-        puts("メール送信")
-        puts(res)
+        return res
     end
     
     

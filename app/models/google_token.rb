@@ -1,9 +1,11 @@
+include ConnectHttp
+
 class GoogleToken < ActiveRecord::Base
     def new
     
     end
     
-    # アクセストークンのリフレッシュ（2時間以内に定期実行）
+    # アクセストークンのリフレッシュ（1時間以内に定期実行）
     def refresh
         # ここに処理を記述
         
@@ -23,18 +25,22 @@ class GoogleToken < ActiveRecord::Base
         }
         
         #HTTP.post(URL)でURLにpostリクエストを送る
-        res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded").post("https://accounts.google.com/o/oauth2/token", :form => postbody )
-    	  
+        res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded")
+        .post("https://accounts.google.com/o/oauth2/token", :ssl_context => CTX, :form => postbody )
+        
       	if res.code.to_s == "200"
         	j = ActiveSupport::JSON.decode( res )
         	self.account_id = APP_CONFIG["google"]["user_name"]
         	self.access_token = j["access_token"]
         	self.refresh_token = j["refresh_token"]
         	self.expire = Time.now + j["expires_in"].second   # expires_in => 3600秒(1時間)
-        	self.status = 1
+        	#self.status = 1
         	self.save
+        	
+    	    debugger
+    	
         else
-            self.status = 0
+            #self.status = 0
             puts "Googleアクセストークンの更新に失敗しました。"
             puts self
             puts res

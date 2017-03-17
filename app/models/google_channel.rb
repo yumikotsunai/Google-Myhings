@@ -6,7 +6,8 @@ class GoogleChannel < ActiveRecord::Base
         googleAccountId = APP_CONFIG["google"]["user_name"]
         clientId = GoogleAccount.find_by(account_id: googleAccountId).client_id
         clientSecret = GoogleAccount.find_by(account_id: googleAccountId).client_secret
-        refreshToken = GoogleToken.find_by(account_id: googleAccountId).refresh_token
+        #refreshToken = GoogleToken.find_by(account_id: googleAccountId).refresh_token
+        refreshToken = "1/pdYsrCvJ5_WnjQDtDGajZMuSQFSh5-DohNH5qtXMrCM"
         calendarId = GoogleAccount.find_by(account_id: googleAccountId).calendar_id
         
     	#GoogleApiを利用する
@@ -29,28 +30,30 @@ class GoogleChannel < ActiveRecord::Base
         )
     	  
     	@status = res.status
-    	  
+    	
+    	debugger
+    	
     	if res.status.to_s == "200"
     	    puts(res.body)
-            @status = "認証に成功しました"
+          @status = "認証に成功しました"
             
-            #カレンダーIDが含まれているURIを取得.以下は取得例
-          	#"https://www.googleapis.com/calendar/v3/calendars/i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com/events?maxResults=250&alt=json"
-          	j = ActiveSupport::JSON.decode( res.body )
-          	resourceUri = j["resourceUri"]
+          #カレンダーIDが含まれているURIを取得.以下は取得例
+          #"https://www.googleapis.com/calendar/v3/calendars/i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com/events?maxResults=250&alt=json"
+          j = ActiveSupport::JSON.decode( res.body )
+          resourceUri = j["resourceUri"]
         	 
-            #チャネルのIDと、カレンダーIDの対応を保存
-            self.channel_id = j["id"]
+          #チャネルのIDと、カレンダーIDの対応を保存
+          self.channel_id = j["id"]
         	self.calendar_id = calendarId
         	self.access_token = ""
         	self.refresh_token = refreshToken
         	self.expires_in = DateTime.now + 7.day
-        	self.status = 1
+        	#self.status = 1
         	self.resource_id = j["resourceId"]
         	self.save
         else
     	  @status = "認証に失敗しました"
-    	  self.status = 0
+    	    #self.status = 0
           puts @status
           puts self
           puts res

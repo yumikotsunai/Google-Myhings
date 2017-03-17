@@ -15,6 +15,8 @@ class ConnectToken < ActiveRecord::Base
         res = HTTP.headers("Content-Type" => "application/x-www-form-urlencoded")
         .post("https://connect.lockstate.jp/oauth/token", :ssl_context => CTX , :form => postform)
         
+        debugger
+        
         if res.code == 200
             j = ActiveSupport::JSON.decode( res.body )
             self.access_token = j["access_token"]

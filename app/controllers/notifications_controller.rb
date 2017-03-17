@@ -66,7 +66,6 @@ class NotificationsController < ApplicationController
     
     #カレンダーIDに紐付いたデバイスIDを取得
     lockId = CalendarToLock.find_by(calendar_id: calendarId).lock_id
-    debugger
     #GoogleApiイベントメソッド呼出し
     client = Google::APIClient.new
     client.authorization.client_id = clientId
@@ -140,10 +139,44 @@ class NotificationsController < ApplicationController
       startAt = startStr.slice(0,19)
       #endDatetime = endStr.to_datetime - Rational(9, 24)  
       endAt = endStr.slice(0,19)
-      #ConnectAPIの呼出し
-      #connectApi = ConnectApiExec.new
+      
       #アクセスゲストの作成
-      ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
+      res = ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
+      debugger
+      if res.code != 200 and res.code != 201 then
+        puts("アクセスゲストの作成失敗")
+        puts res.body
+      else
+        puts("アクセスゲストの作成成功")
+        puts res.body
+        j = ActiveSupport::JSON.decode(res.body)
+        data = j["data"]
+        userId = data["id"]
+        
+        #アクセスゲストとデバイス紐付け
+        res = ConnectApiExec.appendguest2lock(userId, lockId)
+        debugger
+        if res.code != 200 and res.code != 201 then
+          puts("デバイス紐付け失敗")
+          puts res.body
+        else
+          puts("デバイス紐付け成功")
+          puts res.body
+          
+          #メール送信
+          res = ConnectApiExec.sendemail(userId)
+          debugger
+          if res.code != 200 and res.code != 201 then
+            puts("メール送信失敗")
+            puts res.body
+          else
+            puts("メール送信成功")
+            puts res.body
+          end
+        end
+      end
+      
+      
     end
   end
   
