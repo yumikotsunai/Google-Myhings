@@ -33,9 +33,9 @@ production:
     #webhost: "https://google-demo-yumikotsunai.c9users.io/"
     connect:
         user_name: "demo@remotelock.com"
-        client: "5878a16492f24323c2ef3d9c970fd9086fbf1568724afb8065dc3180fd4bdeac"
-        secret: "721cbf34fc3ff3d5f9033d3dd765fb351095c75b7cde403533295b3c495dd4cd"
-        uuid: "b9fdcd0c-3713-4043-b7a6-3501bc9832ad"
+        client: "86169dfc79da7ce9000a1d2f37dcb95f96d9b3bb03bf32e57b540cbaedbf0989"
+        secret: "1bfa525b96c3102c65d1f2be4abfa541f0b57ee17ac92dffbb9abf6417740c23"
+        uuid: "8a2f4c49-1c3a-41e4-bfa8-8dcde063ee07"
     google:
         user_name: "kke.remotelock@gmail.com"
         client: "404180661728-qotv9so92qt4pp6s7v9jlmheik6bespe.apps.googleusercontent.com"

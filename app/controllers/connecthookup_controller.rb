@@ -45,10 +45,12 @@ class ConnecthookupController < ApplicationController
     
     if res.code!=200
       @res = res
+      @error = res
       @state = "認証に失敗しました"
       render
     else
       @res = res
+      @error = ""
       j = ActiveSupport::JSON.decode( @res.body )
       require 'time'
       #require 'date'
