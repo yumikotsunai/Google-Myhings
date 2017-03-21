@@ -10,8 +10,8 @@ class GoogleChannel < ActiveRecord::Base
         #refreshToken = "1/pdYsrCvJ5_WnjQDtDGajZMuSQFSh5-DohNH5qtXMrCM"
         calendarId = GoogleAccount.find_by(account_id: googleAccountId).calendar_id
         
-    	#GoogleApiを利用する
-    	client = Google::APIClient.new
+    	  #GoogleApiを利用する
+    	  client = Google::APIClient.new
         client.authorization.client_id = clientId
         client.authorization.client_secret = clientSecret
         client.authorization.refresh_token = refreshToken
@@ -67,7 +67,7 @@ class GoogleChannel < ActiveRecord::Base
         #アカウントIDに紐付くカレンダーIDから、channelIdとresourceIdを取得
         calendarId = GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]).calendar_id
         channelId = GoogleChannel.find_by(calendar_id: calendarId).channel_id
-        resourceId = GoogleChannel.find_by(calendar_id: calendarId).resourceId
+        resourceId = GoogleChannel.find_by(calendar_id: calendarId).resource_id
         accessToken = GoogleToken.find_by(account_id: APP_CONFIG["google"]["user_name"]).access_token
         
         postbody = {
