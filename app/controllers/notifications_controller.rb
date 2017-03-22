@@ -142,7 +142,7 @@ class NotificationsController < ApplicationController
       
       #アクセスゲストの作成
       res = ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
-      debugger
+
       if res.code != 200 and res.code != 201 then
         puts("アクセスゲストの作成失敗")
         puts res.body
@@ -155,7 +155,7 @@ class NotificationsController < ApplicationController
         
         #アクセスゲストとデバイス紐付け
         res = ConnectApiExec.appendguest2lock(userId, lockId)
-        debugger
+
         if res.code != 200 and res.code != 201 then
           puts("デバイス紐付け失敗")
           puts res.body
@@ -165,7 +165,7 @@ class NotificationsController < ApplicationController
           
           #メール送信
           res = ConnectApiExec.sendemail(userId)
-          debugger
+
           if res.code != 200 and res.code != 201 then
             puts("メール送信失敗")
             puts res.body
