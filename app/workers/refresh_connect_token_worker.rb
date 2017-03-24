@@ -4,7 +4,8 @@ class RefreshConnectTokenWorker
   
   # 2時間以内に定期実行⇒とりあえず1時間毎
   recurrence do
-    hourly(1)
+    #hourly(1)
+    minutely(10)
   end
 
   def perform
