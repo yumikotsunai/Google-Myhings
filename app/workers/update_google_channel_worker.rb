@@ -2,11 +2,9 @@ class UpdateGoogleChannelWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
 
-  # 1週間以内に定期実行⇒とりあえず6日毎#実験的に1時間ごと
+  # 1週間以内に定期実行⇒とりあえず6日毎
   recurrence do
-    #daily(6)
-    #hourly(1)
-    minutely(10)
+    daily(6)
   end
   
   def perform
