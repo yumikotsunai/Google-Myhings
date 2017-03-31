@@ -47,4 +47,6 @@ production:
         client: "404180661728-qotv9so92qt4pp6s7v9jlmheik6bespe.apps.googleusercontent.com"
         secret: "_ZS6_pVing3DInTzpJ7c3QpJ"
         calendar_id: "g8ukpibvlfle41hplt1g3rplu0@group.calendar.google.com"
-        google-site-verification: '<meta name="google-site-verification" content="mwXIsAM7T9kSRBW3kjGPEP7LkI_CATVt0eJgBTmK-es" />'
+        #google-site-verification: '<meta name="google-site-verification" content="mwXIsAM7T9kSRBW3kjGPEP7LkI_CATVt0eJgBTmK-es" />'
+        #↑apidemo2 ↓apidemo
+        google-site-verification: '<meta name="google-site-verification" content="PZDi1CWGW25rzFiv5I5OBN2btplsGK2ErW3jxVZ8DsQ" />'
