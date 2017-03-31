@@ -27,10 +27,10 @@ class NotificationsController < ApplicationController
     resourceId = request.headers["HTTP_X_GOOG_RESOURCE_ID"]
     
     #不要なchannelの削除
-	  #deletechannel( channelId, resourceId )
+	  deletechannel( channelId, resourceId )
     
     #イベント情報の取得
-	  getevent
+	  #getevent
 	  
   end
   
