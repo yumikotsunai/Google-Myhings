@@ -7,3 +7,14 @@ Sidekiq.configure_server do |config|
     config.redis = { url: 'redis://localhost:6379' }
   end
 end
+
+
+Sidekiq.configure_client do |config|
+  if Rails.env.production?
+    if ENV['REDISCLOUD_URL']
+      config.redis = { url: ENV['REDISCLOUD_URL'], namespace: 'sidekiq' }
+    end
+  else
+    config.redis = { url: 'redis://localhost:6379' }
+  end
+end
