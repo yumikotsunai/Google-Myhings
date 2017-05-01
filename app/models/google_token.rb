@@ -29,13 +29,38 @@ class GoogleToken < ActiveRecord::Base
         .post("https://accounts.google.com/o/oauth2/token", :ssl_context => CTX, :form => postbody )
         
       	if res.code.to_s == "200"
-        	j = ActiveSupport::JSON.decode( res )
-        	self.account_id = APP_CONFIG["google"]["user_name"]
-        	self.access_token = j["access_token"]
-        	self.refresh_token = j["refresh_token"]
-        	self.expire = Time.now + j["expires_in"].second   # expires_in => 3600秒(1時間)
+      	    
+      	    j = ActiveSupport::JSON.decode( res )
+      	    
+      	    #GoogleのアカウントIDをキーにしてGoogleTokensのDBを検索
+      	    gAccount = nil
+      	    id = nil
+      	    if GoogleToken.find_by(account_id: APP_CONFIG["google"]["user_name"]) != nil
+      	      gAccount = GoogleToken.find_by(account_id: APP_CONFIG["google"]["user_name"]).account_id
+      	      id = GoogleToken.find_by(account_id: APP_CONFIG["google"]["user_name"]).id
+      	    end 
+      	    
+            if gAccount == nil
+              #新規登録
+              self.account_id = APP_CONFIG["google"]["user_name"]
+        	  self.access_token = j["access_token"]
+        	  self.refresh_token = j["refresh_token"]
+        	  self.expire = Time.now + j["expires_in"].second   # expires_in => 3600秒(1時間)
+        	  #self.status = 1
+        	  self.save
+            else
+              #更新する
+              #gAccount = self.find(account_id: APP_CONFIG["google"]["user_name"])
+        	  GoogleToken.update(id, :access_token => j["access_token"], :refresh_token => j["refresh_token"], :expire => Time.now + j["expires_in"].second)
+            end
+      	    
+        	#j = ActiveSupport::JSON.decode( res )
+        	#self.account_id = APP_CONFIG["google"]["user_name"]
+        	#self.access_token = j["access_token"]
+        	#self.refresh_token = j["refresh_token"]
+        	#self.expire = Time.now + j["expires_in"].second   # expires_in => 3600秒(1時間)
         	#self.status = 1
-        	self.save
+        	#self.save
         	
         else
             #self.status = 0

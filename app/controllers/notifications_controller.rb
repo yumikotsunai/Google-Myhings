@@ -25,12 +25,20 @@ class NotificationsController < ApplicationController
     #googleCalendarからのrequest情報
     channelId = request.headers["HTTP_X_GOOG_CHANNEL_ID"]#これで判定する。
     resourceId = request.headers["HTTP_X_GOOG_RESOURCE_ID"]
+    calendarId = GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]).calendar_id
     
     #不要なchannelの削除
 	  #deletechannel( channelId, resourceId )
     
     #イベント情報の取得
-	  getevent
+    #チャネルIDがカレンダーIDの中で最新の場合のみ
+    if  GoogleChannel.find_by(calendar_id: calendarId) != nil
+      channelIdDb = GoogleChannel.find_by(calendar_id: calendarId).channel_id
+      debugger
+      if channelId == channelIdDb
+  	    getevent
+  	  end 
+	  end
 	  
   end
   
@@ -49,6 +57,7 @@ class NotificationsController < ApplicationController
     .post("https://www.googleapis.com/calendar/v3/channels/stop", :ssl_context => CTX , :body => postbody.to_json)
     
     puts("channel削除")
+    puts(channelId)
     puts(res.code)
   end
   
@@ -65,7 +74,10 @@ class NotificationsController < ApplicationController
     refreshToken = GoogleToken.find_by(account_id: @@googleAccountId).refresh_token
     
     #カレンダーIDに紐付いたデバイスIDを取得
-    lockId = CalendarToLock.find_by(calendar_id: calendarId).lock_id
+    lockId = nil
+    if CalendarToLock.find_by(calendar_id: calendarId) != nil
+      lockId = CalendarToLock.find_by(calendar_id: calendarId).lock_id
+    end
     #GoogleApiイベントメソッド呼出し
     client = Google::APIClient.new
     client.authorization.client_id = clientId

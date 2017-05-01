@@ -32,6 +32,7 @@ class GoogleChannel < ActiveRecord::Base
     	@status = res.status
     	
     	if res.status.to_s == "200"
+    	    puts("チャネル作成に成功")
     	    puts(res.body)
           @status = "認証に成功しました"
             
@@ -39,16 +40,36 @@ class GoogleChannel < ActiveRecord::Base
           #"https://www.googleapis.com/calendar/v3/calendars/i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com/events?maxResults=250&alt=json"
           j = ActiveSupport::JSON.decode( res.body )
           resourceUri = j["resourceUri"]
+          
+          #GoogleのカレンダーIDをキーにしてGoogleChannelのDBを検索
+      	  gCalendarId = nil
+      	  id = nil
+      	  if GoogleChannel.find_by(calendar_id: calendarId) != nil
+      	    gCalendarId = GoogleChannel.find_by(calendar_id: calendarId).calendar_id
+      	    id = GoogleChannel.find_by(calendar_id: calendarId).id
+      	  end 
+      	  debugger
         	 
-          #チャネルのIDと、カレンダーIDの対応を保存
-          self.channel_id = j["id"]
-        	self.calendar_id = calendarId
-        	self.access_token = ""
-        	self.refresh_token = refreshToken
-        	self.expires_in = DateTime.now + 7.day
-        	#self.status = 1
-        	self.resource_id = j["resourceId"]
-        	self.save
+        	if gCalendarId == nil
+            #チャネルのIDと、カレンダーIDの対応を新規保存
+            self.channel_id = j["id"]
+          	self.calendar_id = calendarId
+          	self.access_token = ""
+          	self.refresh_token = refreshToken
+          	self.expires_in = DateTime.now + 7.day
+          	#self.status = 1
+          	self.resource_id = j["resourceId"]
+          	debugger
+          	self.save
+        	else
+        	  #更新
+        	  debugger
+        	  gChannel = GoogleChannel.find(id)
+        	  gChannel.update_attributes(:channel_id => j["id"], :refresh_token => refreshToken, :expires_in => DateTime.now + 7.day, :resource_id => j["resourceId"])
+        	  
+        	  #GoogleToken.update(id, :access_token => j["access_token"], :refresh_token => j["refresh_token"], :expire => Time.now + j["expires_in"].second)
+        	  
+        	end
         else
     	  @status = "認証に失敗しました"
     	    #self.status = 0

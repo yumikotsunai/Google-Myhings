@@ -23,15 +23,19 @@ class HookupController < ApplicationController
     @@calendarId = params[:calendarId]
     @@redirectUri = params[:redirectUri]
     
-    #以下だと、入力文字列が認識されないようなのでコメントアウト
-    #@@clientId = APP_CONFIG["google"]["client"] || params[:clientId].presence
-    #@@clientSecret = APP_CONFIG["google"]["secret"] || params[:clientSecret]
-    #@@calendarId = APP_CONFIG["google"]["calendar_id"] || params[:calendarId]
-    #@@redirectUri = APP_CONFIG["webhost"]+'hookup/callback' || params[:redirectUri]
-    
-    #GoogleAccountテーブルに値を保存
-    googleAccount = GoogleAccount.new(account_id: @@googleAccountId, client_id: @@clientId, client_secret: @@clientSecret, calendar_id:@@calendarId, redirect_uri:@@redirectUri )
-    googleAccount.save
+    #GoogleAccountテーブルに値を保存⇒1アカウントにつき1カレンダーIDとする
+    if GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]) == nil
+    #新規作成
+      debugger
+      googleAccount = GoogleAccount.new(account_id: @@googleAccountId, client_id: @@clientId, client_secret: @@clientSecret, calendar_id:@@calendarId, redirect_uri:@@redirectUri )
+      googleAccount.save
+    else
+    #更新
+      debugger
+      id = GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]).id
+      gAccount = GoogleAccount.find(id)
+      gAccount.update_attributes(:client_id => @@clientId, :client_secret => @@clientSecret, :calendar_id => @@calendarId, :redirect_uri => @@redirectUri)
+    end  
     
     #google認証のURLにリダイレクト
     url = 'https://accounts.google.com/o/oauth2/auth?client_id=' + @@clientId + '&redirect_uri=' + @@redirectUri + 
