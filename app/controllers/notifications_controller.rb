@@ -97,7 +97,8 @@ class NotificationsController < ApplicationController
       api_method: service.events.list,
       parameters: {
         calendarId: calendarId,
-        updatedMin: 1.minute.ago.to_datetime.rfc3339
+        #updatedMin: 1.minute.ago.to_datetime.rfc3339
+        updatedMin: 10.second.ago.to_datetime.rfc3339
       }
     )
     
