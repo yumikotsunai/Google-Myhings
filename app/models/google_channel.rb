@@ -48,8 +48,7 @@ class GoogleChannel < ActiveRecord::Base
       	    gCalendarId = GoogleChannel.find_by(calendar_id: calendarId).calendar_id
       	    id = GoogleChannel.find_by(calendar_id: calendarId).id
       	  end 
-      	  debugger
-        	 
+      	  	 
         	if gCalendarId == nil
             #チャネルのIDと、カレンダーIDの対応を新規保存
             self.channel_id = j["id"]
@@ -59,11 +58,9 @@ class GoogleChannel < ActiveRecord::Base
           	self.expires_in = DateTime.now + 7.day
           	#self.status = 1
           	self.resource_id = j["resourceId"]
-          	debugger
           	self.save
         	else
         	  #更新
-        	  debugger
         	  gChannel = GoogleChannel.find(id)
         	  gChannel.update_attributes(:channel_id => j["id"], :refresh_token => refreshToken, :expires_in => DateTime.now + 7.day, :resource_id => j["resourceId"])
         	  

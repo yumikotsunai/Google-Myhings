@@ -25,7 +25,10 @@ class NotificationsController < ApplicationController
     #googleCalendarからのrequest情報
     channelId = request.headers["HTTP_X_GOOG_CHANNEL_ID"]#これで判定する。
     resourceId = request.headers["HTTP_X_GOOG_RESOURCE_ID"]
-    calendarId = GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]).calendar_id
+    calendarId = nil
+    if GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]) != nil
+      calendarId = GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]).calendar_id
+    end
     
     #不要なchannelの削除
 	  #deletechannel( channelId, resourceId )
@@ -34,7 +37,7 @@ class NotificationsController < ApplicationController
     #チャネルIDがカレンダーIDの中で最新の場合のみ
     if  GoogleChannel.find_by(calendar_id: calendarId) != nil
       channelIdDb = GoogleChannel.find_by(calendar_id: calendarId).channel_id
-      debugger
+   
       if channelId == channelIdDb
   	    getevent
   	  end 

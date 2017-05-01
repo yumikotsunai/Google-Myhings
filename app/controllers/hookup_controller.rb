@@ -26,12 +26,10 @@ class HookupController < ApplicationController
     #GoogleAccountテーブルに値を保存⇒1アカウントにつき1カレンダーIDとする
     if GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]) == nil
     #新規作成
-      debugger
       googleAccount = GoogleAccount.new(account_id: @@googleAccountId, client_id: @@clientId, client_secret: @@clientSecret, calendar_id:@@calendarId, redirect_uri:@@redirectUri )
       googleAccount.save
     else
     #更新
-      debugger
       id = GoogleAccount.find_by(account_id: APP_CONFIG["google"]["user_name"]).id
       gAccount = GoogleAccount.find(id)
       gAccount.update_attributes(:client_id => @@clientId, :client_secret => @@clientSecret, :calendar_id => @@calendarId, :redirect_uri => @@redirectUri)
