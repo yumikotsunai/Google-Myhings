@@ -83,7 +83,7 @@ class ConnectApiExec
         res = HTTP.headers(:accept => "vnd.lockstate.v1+json",:Authorization => authtoken)
         .get("https://api.lockstate.jp/devices?type=lock", :ssl_context => CTX)
         @res = ActiveSupport::JSON.decode(res.body)
-        puts @res
+        #puts @res
         return @res
     end
     

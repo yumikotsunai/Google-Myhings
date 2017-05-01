@@ -37,8 +37,11 @@ class NotificationsController < ApplicationController
     #チャネルIDがカレンダーIDの中で最新の場合のみ
     if  GoogleChannel.find_by(calendar_id: calendarId) != nil
       channelIdDb = GoogleChannel.find_by(calendar_id: calendarId).channel_id
-   
+     
       if channelId == channelIdDb
+        puts("Connectイベントの実行")
+        puts(channelId)
+        puts(channelIdDb)
   	    getevent
   	  end 
 	  end
