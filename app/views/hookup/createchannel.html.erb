@@ -6,7 +6,9 @@
 </div>
 
 <div style= "text-align:center;line-height:100%;padding:50px;">
-  <p>続けてConnectAPIの認証を行ってください。</p>
-  <a href = <%= APP_CONFIG["webhost"] + "connecthookup/setup"%> >ConnectAPI認証ページ</a>
+  <% if @status == "認証に成功しました" %>
+    <p>続けてConnectAPIの認証を行ってください。</p>
+    <a href = <%= APP_CONFIG["webhost"] + "connecthookup/setup"%> >ConnectAPI認証ページ</a>
+  <% end %>
 </div>  
 

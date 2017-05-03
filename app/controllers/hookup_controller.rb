@@ -45,6 +45,7 @@ class HookupController < ApplicationController
   
   #google認証後のリダイレクト先URI
   def callback
+    
     #引数(=コード)を取得して、DBを更新
     code = params[:code]
     if GoogleAccount.find_by(account_id: @@googleAccountId) != nil

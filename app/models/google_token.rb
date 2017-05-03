@@ -53,15 +53,6 @@ class GoogleToken < ActiveRecord::Base
               #gAccount = self.find(account_id: APP_CONFIG["google"]["user_name"])
         	  GoogleToken.update(id, :access_token => j["access_token"], :refresh_token => j["refresh_token"], :expire => Time.now + j["expires_in"].second)
             end
-      	    
-        	#j = ActiveSupport::JSON.decode( res )
-        	#self.account_id = APP_CONFIG["google"]["user_name"]
-        	#self.access_token = j["access_token"]
-        	#self.refresh_token = j["refresh_token"]
-        	#self.expire = Time.now + j["expires_in"].second   # expires_in => 3600秒(1時間)
-        	#self.status = 1
-        	#self.save
-        	
         else
             #self.status = 0
             puts "Googleアクセストークンの更新に失敗しました。"

@@ -1,5 +1,8 @@
 class GoogleChannel < ActiveRecord::Base
 
+    #チャネルの作成結果
+    @@status = ""
+
     # チャネル更新（1週間以内に定期実行）
     def update
         # ここに処理を記述
@@ -10,8 +13,8 @@ class GoogleChannel < ActiveRecord::Base
         #refreshToken = "1/pdYsrCvJ5_WnjQDtDGajZMuSQFSh5-DohNH5qtXMrCM"
         calendarId = GoogleAccount.find_by(account_id: googleAccountId).calendar_id
         
-    	  #GoogleApiを利用する
-    	  client = Google::APIClient.new
+    	#GoogleApiを利用する
+    	client = Google::APIClient.new
         client.authorization.client_id = clientId
         client.authorization.client_secret = clientSecret
         client.authorization.refresh_token = refreshToken
@@ -19,62 +22,59 @@ class GoogleChannel < ActiveRecord::Base
         
         service = client.discovered_api('calendar', 'v3')
         
-        res = client.execute!(
-          api_method: service.events.watch,
-          parameters: { calendarId: calendarId },
-          body_object: {
-            id: SecureRandom.uuid(),
-            type: 'web_hook',
-            address: URI.encode(APP_CONFIG["webhost"]+'notifications/callback')
-          }
-        )
-    	  
-    	@status = res.status
-    	
-    	if res.status.to_s == "200"
-    	    puts("チャネル作成に成功")
-    	    puts(res.body)
-          @status = "認証に成功しました"
+        begin
+            res = client.execute!(
+              api_method: service.events.watch,
+              parameters: { calendarId: calendarId },
+              body_object: {
+                id: SecureRandom.uuid(),
+                type: 'web_hook',
+                address: URI.encode(APP_CONFIG["webhost"]+'notifications/callback')
+              }
+            )
             
-          #カレンダーIDが含まれているURIを取得.以下は取得例
-          #"https://www.googleapis.com/calendar/v3/calendars/i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com/events?maxResults=250&alt=json"
-          j = ActiveSupport::JSON.decode( res.body )
-          resourceUri = j["resourceUri"]
-          
-          #GoogleのカレンダーIDをキーにしてGoogleChannelのDBを検索
-      	  gCalendarId = nil
-      	  id = nil
-      	  if GoogleChannel.find_by(calendar_id: calendarId) != nil
-      	    gCalendarId = GoogleChannel.find_by(calendar_id: calendarId).calendar_id
-      	    id = GoogleChannel.find_by(calendar_id: calendarId).id
-      	  end 
-      	  	 
-        	if gCalendarId == nil
-            #チャネルのIDと、カレンダーIDの対応を新規保存
-            self.channel_id = j["id"]
-          	self.calendar_id = calendarId
-          	self.access_token = ""
-          	self.refresh_token = refreshToken
-          	self.expires_in = DateTime.now + 7.day
-          	#self.status = 1
-          	self.resource_id = j["resourceId"]
-          	self.save
-        	else
-        	  #更新
-        	  gChannel = GoogleChannel.find(id)
-        	  gChannel.update_attributes(:channel_id => j["id"], :refresh_token => refreshToken, :expires_in => DateTime.now + 7.day, :resource_id => j["resourceId"])
-        	  
-        	  #GoogleToken.update(id, :access_token => j["access_token"], :refresh_token => j["refresh_token"], :expire => Time.now + j["expires_in"].second)
-        	  
+        	if res.status.to_s == "200"
+        	  puts("チャネル作成に成功")
+        	  puts(res.body)
+              @@status = "認証に成功しました"
+              j = ActiveSupport::JSON.decode( res.body )
+              
+              #GoogleのカレンダーIDをキーにしてGoogleChannelのDBを検索
+          	  gCalendarId = nil
+          	  id = nil
+          	  if GoogleChannel.find_by(calendar_id: calendarId) != nil
+          	    gCalendarId = GoogleChannel.find_by(calendar_id: calendarId).calendar_id
+          	    id = GoogleChannel.find_by(calendar_id: calendarId).id
+          	  end 
+          	  	 
+            	if gCalendarId == nil
+                #チャネルのIDと、カレンダーIDの対応を新規保存
+                self.channel_id = j["id"]
+              	self.calendar_id = calendarId
+              	self.access_token = ""
+              	self.refresh_token = refreshToken
+              	self.expires_in = DateTime.now + 7.day
+              	#self.status = 1
+              	self.resource_id = j["resourceId"]
+              	self.save
+            	else
+            	  #更新
+            	  gChannel = GoogleChannel.find(id)
+            	  gChannel.update_attributes(:channel_id => j["id"], :refresh_token => refreshToken, :expires_in => DateTime.now + 7.day, :resource_id => j["resourceId"])
+            	end
+            else
+        	  @@status = "認証に失敗しました"
+        	  #self.status = 0
+              puts @@status
+              puts self
+              puts res
         	end
-        else
-    	  @status = "認証に失敗しました"
-    	    #self.status = 0
-          puts @status
-          puts self
-          puts res
-    	end
     	
+    	rescue
+            @@status = "選択したGoogleのアカウントIDと入力したアカウント情報が一致していません。全画面に戻って入力もしくは選択をし直してください。"
+        end
+    	
+    	@status = @@status
     	return @status
     end
     
