@@ -38,8 +38,6 @@ class NotificationsController < ApplicationController
     if  GoogleChannel.find_by(calendar_id: calendarId) != nil
       channelIdDb = GoogleChannel.find_by(calendar_id: calendarId).channel_id
       
-      debugger
-      
       if channelId == channelIdDb
         puts("Connectイベントの実行")
         puts(channelId)
@@ -112,8 +110,6 @@ class NotificationsController < ApplicationController
     items = res_hash["items"]
     puts("イベント情報の取得")
     puts(items)
-    
-    debugger
     
     if !items.blank?
       email = ""

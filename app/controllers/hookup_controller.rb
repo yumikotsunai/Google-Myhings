@@ -69,7 +69,6 @@ class HookupController < ApplicationController
     googleChannel = GoogleChannel.new
     @status = googleChannel.update
     
-    debugger
     if @status != "認証に成功しました"
       #google_accountsとgoogle_tokensのDBを削除
       if GoogleAccount.find_by(account_id: @@googleAccountId) != nil
