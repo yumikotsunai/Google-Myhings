@@ -72,10 +72,14 @@ class HookupController < ApplicationController
     debugger
     if @status != "認証に成功しました"
       #google_accountsとgoogle_tokensのDBを削除
-      gaId = GoogleAccount.find_by(account_id: @@googleAccountId).id
-      GoogleAccount.delete(gaId)
-      gtId = GoogleToken.find_by(account_id: @@googleAccountId).id
-      GoogleToken.delete(gtId)
+      if GoogleAccount.find_by(account_id: @@googleAccountId) != nil
+        gaId = GoogleAccount.find_by(account_id: @@googleAccountId).id
+        GoogleAccount.delete(gaId)
+      end
+      if GoogleToken.find_by(account_id: @@googleAccountId) != nil
+        gtId = GoogleToken.find_by(account_id: @@googleAccountId).id
+        GoogleToken.delete(gtId)
+      end
     end
     
   end
