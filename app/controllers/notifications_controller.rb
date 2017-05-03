@@ -37,13 +37,19 @@ class NotificationsController < ApplicationController
     #チャネルIDがカレンダーIDの中で最新の場合のみ
     if  GoogleChannel.find_by(calendar_id: calendarId) != nil
       channelIdDb = GoogleChannel.find_by(calendar_id: calendarId).channel_id
-     
+      
+      debugger
+      
       if channelId == channelIdDb
         puts("Connectイベントの実行")
         puts(channelId)
         puts(channelIdDb)
   	    getevent
-  	  end 
+  	  else
+  	    #不要なchannelの削除
+  	    deletechannel( channelId, resourceId )
+  	  end
+  	  
 	  end
 	  
   end
@@ -97,8 +103,8 @@ class NotificationsController < ApplicationController
       api_method: service.events.list,
       parameters: {
         calendarId: calendarId,
-        #updatedMin: 1.minute.ago.to_datetime.rfc3339
-        updatedMin: 10.second.ago.to_datetime.rfc3339
+        updatedMin: 1.minute.ago.to_datetime.rfc3339
+        #updatedMin: 10.second.ago.to_datetime.rfc3339
       }
     )
     
@@ -106,6 +112,8 @@ class NotificationsController < ApplicationController
     items = res_hash["items"]
     puts("イベント情報の取得")
     puts(items)
+    
+    debugger
     
     if !items.blank?
       email = ""

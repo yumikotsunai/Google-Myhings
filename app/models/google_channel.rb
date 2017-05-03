@@ -71,7 +71,7 @@ class GoogleChannel < ActiveRecord::Base
         	end
     	
     	rescue
-            @@status = "選択したGoogleのアカウントIDと入力したアカウント情報が一致していません。全画面に戻って入力もしくは選択をし直してください。"
+            @@status = "選択したGoogleのアカウントIDと入力したアカウント情報が一致していません" 
         end
     	
     	@status = @@status

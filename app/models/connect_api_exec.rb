@@ -37,6 +37,9 @@ class ConnectApiExec
         res = HTTP.headers("Content-Type" => "application/json",:Authorization => authtoken )
         .post("https://api.lockstate.jp/access_persons", :ssl_context => CTX , :body => postbody.to_json)
         
+        debugger
+        
+        
         return res
         
     end
