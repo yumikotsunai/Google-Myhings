@@ -20,7 +20,8 @@ development:
         secret: "b88822e0976b6e6a9fb0096a3b1c860b12f9a405fd2d0597a1d60cf68473ac46"
         uuid: "c0ee6144-3734-4e11-b4be-c35e4abdc05c"
     google:
-        user_name: "yumikokke@gmail.com"
+        #user_name: "yumikokke@gmail.com"
+        user_name: "A"
         client: "841258018012-jqn06q4ifmfvbj5ip42rvtemetcga7oj.apps.googleusercontent.com"
         secret: "HuQ43i5_NiqOeOIZca4oJttJ"
         calendar_id: "i8a77r26f9pu967g3pqpubv0ng@group.calendar.google.com"
