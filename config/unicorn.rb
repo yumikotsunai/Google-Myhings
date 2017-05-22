@@ -18,8 +18,10 @@ before_fork do |server, worker|
 
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.connection.disconnect!
-
+   
+  puts("unicorn実行1") 
   if ENV['RAILS_ENV'] == 'staging' # Sidekiq関連はここ！【更新あり】
+    puts("unicorn実行2") 
     @sidekiq_pid ||= spawn("bundle exec sidekiq -c 2")
     Rails.logger.info('Spawned sidekiq #{@sidekiq_pid}')
   end
