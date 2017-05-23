@@ -16,8 +16,9 @@ class ConnectApiExec
     def self.createguests(email="名無し", statAt="2017-01-24T16:04:00", endAt="2017-01-25T16:04:00", lockId="c744baed-9b63-4b73-bbcc-a5406ebdd8ae")
         
         #PINコード番号のランダム生成
-        pin = (0..9).sort_by{rand}[0,6].join.to_s
-       
+        #pin = (0..9).sort_by{rand}[0,6].join.to_s
+        pin = (0..1).sort_by{rand}[0,4].join.to_s
+        debugger
         #emailからname生成
         #name = email
         #name = name.slice!(email.index("@"), email.length - email.index("@") + 1)

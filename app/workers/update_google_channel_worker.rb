@@ -5,16 +5,19 @@ class UpdateGoogleChannelWorker
   # 1週間以内に定期実行⇒とりあえず6日毎
   recurrence do
     #daily(6)
-    minutely(20)
+    minutely(10)
   end
   
   def perform
     # GoogleCalendarのChannelを順次参照
-    GoogleChannel.find_each do |google_channel|
-      google_channel.update
-    end
-    
+    puts 'google_workerテスト'
     puts DateTime.now
-    puts 'Sidekiq実行:GoogleChannel更新'
+    
+    #GoogleChannel.find_each do |google_channel|
+    #  google_channel.update
+    #end
+    
+    #puts DateTime.now
+    #puts 'Sidekiq実行:GoogleChannel更新'
   end
 end
