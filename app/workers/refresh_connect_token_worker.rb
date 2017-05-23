@@ -2,6 +2,9 @@ class RefreshConnectTokenWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
   
+  puts DateTime.now
+  puts 'connect_workerテスト1'
+  
   # 2時間以内に定期実行⇒とりあえず1時間毎
   recurrence do
     #hourly(1)
@@ -11,7 +14,7 @@ class RefreshConnectTokenWorker
   def perform
     # LS Connectのアクセストークンを順次参照
     puts DateTime.now
-    puts 'connect_workerテスト'
+    puts 'connect_workerテスト2'
     
     #ConnectToken.find_each do |connect_token|
     #  connect_token.refresh
