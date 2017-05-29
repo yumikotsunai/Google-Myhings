@@ -164,16 +164,11 @@ class NotificationsController < ApplicationController
       endAt = endStr.slice(0,19)
       
       #アクセスゲストの作成
-      #begin
-        res = ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
-      #end while res.code == 422
-      
-      debugger
+      res = ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
       
       #PINコードが被った場合は、再作成
       while res.code == 422
         res = ConnectApiExec.createguests(addemail,startAt,endAt,lockId)
-        debugger
       end
       
       if res.code != 200 and res.code != 201 then
