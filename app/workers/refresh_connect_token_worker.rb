@@ -9,7 +9,7 @@ class RefreshConnectTokenWorker
   #recurrence do
   recurrence backfill: true do  
     #hourly(1)
-    minutely(5)
+    minutely(1)
   end
 
   def perform
