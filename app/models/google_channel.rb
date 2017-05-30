@@ -9,8 +9,8 @@ class GoogleChannel < ActiveRecord::Base
         googleAccountId = APP_CONFIG["google"]["user_name"]
         clientId = GoogleAccount.find_by(account_id: googleAccountId).client_id
         clientSecret = GoogleAccount.find_by(account_id: googleAccountId).client_secret
-        refreshToken = GoogleToken.find_by(account_id: googleAccountId).refresh_token
-        #refreshToken = "1/plkTCyyO81GDW_tHOy1i9qHdrbY6YUiFEuKq_1yMZF8"
+        #refreshToken = GoogleToken.find_by(account_id: googleAccountId).refresh_token
+        refreshToken = "1/F2nD5etJXx7IDLbalpBGknDjUBUU3fxo5F0UVfKdIb4"
         calendarId = GoogleAccount.find_by(account_id: googleAccountId).calendar_id
         
     	#GoogleApiを利用する
@@ -32,7 +32,7 @@ class GoogleChannel < ActiveRecord::Base
                 address: URI.encode(APP_CONFIG["webhost"]+'notifications/callback')
               }
             )
-
+            
         	if res.status.to_s == "200"
         	  puts("チャネル作成に成功")
         	  puts(res.body)

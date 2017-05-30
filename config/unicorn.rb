@@ -23,7 +23,7 @@ before_fork do |server, worker|
   puts(ENV['RAILS_ENV'])
   if ENV['RAILS_ENV'] == 'production' # Sidekiq関連はここ！【更新あり】
     puts("unicorn実行2") 
-    @sidekiq_pid ||= spawn("bundle exec sidekiq -c 2")
+    @sidekiq_pid ||= spawn("mkdir -p /app/tmp/pids && bundle exec sidekiq -c 2")
     puts(@sidekiq_pid) 
     Rails.logger.info('Spawned sidekiq #{@sidekiq_pid}')
   end
