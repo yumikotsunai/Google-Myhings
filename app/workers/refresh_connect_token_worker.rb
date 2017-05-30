@@ -6,7 +6,8 @@ class RefreshConnectTokenWorker
   puts 'connect_workerテスト1'
   
   # 2時間以内に定期実行⇒とりあえず1時間毎
-  recurrence do
+  #recurrence do
+  recurrence backfill: true do  
     #hourly(1)
     minutely(5)
   end
