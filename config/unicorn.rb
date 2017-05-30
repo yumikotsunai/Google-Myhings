@@ -5,7 +5,7 @@
 timeout 15
 preload_app true
 
-worker_processes 4
+worker_processes 3
 
 # whatever you had in your unicorn.rb file
 @sidekiq_pid = nil
