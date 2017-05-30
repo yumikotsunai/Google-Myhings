@@ -24,6 +24,6 @@ module GoogleDemo
     config.active_record.raise_in_transactional_callbacks = true
     
     config.autoload_paths << "#{config.root}/app/workers"
-    config.active_job.queue_adapter = :sidekiq
+    #config.active_job.queue_adapter = :sidekiq
   end
 end
