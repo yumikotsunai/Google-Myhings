@@ -2,8 +2,8 @@ class RefreshConnectTokenWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
   
-  puts DateTime.now
-  puts 'connect_workerテスト1'
+  #puts DateTime.now
+  #puts 'connect_workerテスト1'
   
   # 2時間以内に定期実行⇒とりあえず1時間毎
   #recurrence do
