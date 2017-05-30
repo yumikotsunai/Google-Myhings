@@ -9,7 +9,7 @@ class RefreshConnectTokenWorker
   #recurrence do
   recurrence backfill: true do  
     #hourly(1)
-    minutely(1)
+    minutely(5)
   end
 
   def perform
@@ -17,12 +17,12 @@ class RefreshConnectTokenWorker
     puts DateTime.now
     puts 'connect_workerテスト2'
     
-    #ConnectToken.find_each do |connect_token|
-    #  connect_token.refresh
-    #end
+    ConnectToken.find_each do |connect_token|
+      connect_token.refresh
+    end
     
-    #puts DateTime.now
-    #puts 'Sidekiq実行:ConnectAccessToken更新'
+    puts DateTime.now
+    puts 'Sidekiq実行:ConnectAccessToken更新'
   end
   
   
