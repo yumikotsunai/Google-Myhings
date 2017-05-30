@@ -21,7 +21,7 @@ before_fork do |server, worker|
    
   puts("unicorn実行1") 
   puts(ENV['RAILS_ENV'])
-  if ENV['RAILS_ENV'] == 'staging' # Sidekiq関連はここ！【更新あり】
+  if ENV['RAILS_ENV'] == 'production' # Sidekiq関連はここ！【更新あり】
     puts("unicorn実行2") 
     if @sidekiq_pid == nil
       @sidekiq_pid = spawn("mkdir -p /app/tmp/pids && bundle exec sidekiq -c 2")
