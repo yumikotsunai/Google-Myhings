@@ -4,7 +4,7 @@ Sidekiq.configure_server do |config|
       config.redis = { url: ENV['REDISCLOUD_URL'], namespace: 'sidekiq' }
     end
   else
-    config.redis = { url: 'redis://localhost:6379', namespace: 'sidekiq' }
+    config.redis = { url: 'redis://localhost:6379'}
   end
 end
 
