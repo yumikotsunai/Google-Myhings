@@ -36,7 +36,7 @@ development:
 #APP_CONFIG["connect"]["client"]
     
 production:
-    webhost: "https://kkeapidemo5.herokuapp.com/"
+    webhost: "https://kkeapidemo.herokuapp.com/"
     #webhost: "https://google-demo-yumikotsunai.c9users.io/"
     connect:
         user_name: "demo@remotelock.com"
