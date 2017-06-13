@@ -16,6 +16,7 @@ class ConnectToken < ActiveRecord::Base
         .post("https://connect.lockstate.jp/oauth/token", :ssl_context => CTX , :form => postform)
         
         if res.code == 200
+            puts "Connectアクセストークンの更新に成功しました。"
             j = ActiveSupport::JSON.decode( res.body )
             self.access_token = j["access_token"]
             self.refresh_token = j["refresh_token"]

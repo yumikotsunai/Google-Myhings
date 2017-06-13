@@ -7,8 +7,8 @@ class UpdateGoogleChannelWorker
 
   # 1週間以内に定期実行⇒とりあえず6日毎
   recurrence do
-    #daily(6)
-    minutely(10)
+    daily(6)
+    minutely(20)
   end
   
   def perform
